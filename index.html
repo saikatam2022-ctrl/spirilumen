@@ -9,129 +9,31 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Cormorant+Upright:wght@300;400;500&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-
 :root{
-  --ink:#0e0b1f;
-  --deep:#130f28;
-  --panel:#1a1535;
-  --card:#1f1a3d;
-  --p1:#6d28d9;
-  --p2:#8b5cf6;
-  --p3:#c4b5fd;
-  --p4:#ede9fe;
-  --gold:#e2b95a;
-  --gold2:#f5d07a;
-  --gold3:#c49a2a;
-  --rose:#f0abfc;
-  --cream:#f8f4ff;
-  --muted:#9d90bb;
-  --bp:rgba(109,40,217,0.18);
-  --bg:rgba(226,185,90,0.22);
-  --line:rgba(139,92,246,0.2);
-  --lng:rgba(226,185,90,0.22);
+  --ink:#0e0b1f;--deep:#130f28;--panel:#1a1535;--card:#1f1a3d;
+  --p1:#6d28d9;--p2:#8b5cf6;--p3:#c4b5fd;--p4:#ede9fe;
+  --gold:#e2b95a;--gold2:#f5d07a;--gold3:#c49a2a;
+  --rose:#f0abfc;--cream:#f8f4ff;--muted:#9d90bb;
+  --line:rgba(139,92,246,0.2);--lng:rgba(226,185,90,0.22);
 }
-
 html{scroll-behavior:smooth;overflow-x:hidden;}
-body{
-  background:radial-gradient(ellipse 100% 60% at 50% 0%, #1b1240 0%, #13102a 35%, #0e0b1f 65%);
-  color:var(--cream);
-  font-family:'Jost',sans-serif;
-  font-weight:300;
-  overflow-x:hidden;
-  cursor:none;
-}
+body{background:radial-gradient(ellipse 100% 60% at 50% 0%,#1b1240 0%,#13102a 35%,#0e0b1f 65%);color:var(--cream);font-family:'Jost',sans-serif;font-weight:300;overflow-x:hidden;cursor:none;}
 
-/* ══════════════════════════════════════
-   NEW CURSOR — Sun Ray Design
-   Replaces ball+ring with animated sun
-══════════════════════════════════════ */
-#cur-sun{
-  position:fixed;z-index:99999;pointer-events:none;
-  width:24px;height:24px;
-  transform:translate(-50%,-50%);
-  will-change:left,top;
-}
-#cur-sun svg{
-  width:100%;height:100%;
-  animation:sunRotate 8s linear infinite;
-  filter:drop-shadow(0 0 6px rgba(212,168,67,.9)) drop-shadow(0 0 14px rgba(212,168,67,.5));
-  transition:filter .3s;
-}
-#cur-sun.hov svg{
-  animation:sunRotate 3s linear infinite;
-  filter:drop-shadow(0 0 10px rgba(167,139,250,1)) drop-shadow(0 0 24px rgba(167,139,250,.6));
-}
-@keyframes sunRotate{
-  from{transform:rotate(0deg);}
-  to{transform:rotate(360deg);}
-}
-
-/* Astrology trail follower — replaces leaf */
-#cur-trail{
-  position:fixed;z-index:99998;pointer-events:none;
-  width:18px;height:18px;
-  transform:translate(-50%,-50%);
-  will-change:left,top;
-  font-size:13px;line-height:1;
-  opacity:.6;
-  transition:opacity .3s,font-size .3s;
-  filter:drop-shadow(0 0 5px rgba(212,168,67,.6));
-}
-#cur-trail.hov{
-  font-size:18px;opacity:.85;
-  filter:drop-shadow(0 0 10px rgba(167,139,250,.8));
-}
-
-/* Canvas for particle trail */
+/* CURSOR */
+#cur-sun{position:fixed;z-index:99999;pointer-events:none;width:24px;height:24px;transform:translate(-50%,-50%);will-change:left,top;}
+#cur-sun svg{width:100%;height:100%;animation:sunRotate 8s linear infinite;filter:drop-shadow(0 0 6px rgba(212,168,67,.9)) drop-shadow(0 0 14px rgba(212,168,67,.5));transition:filter .3s;}
+#cur-sun.hov svg{animation:sunRotate 3s linear infinite;filter:drop-shadow(0 0 10px rgba(167,139,250,1)) drop-shadow(0 0 24px rgba(167,139,250,.6));}
+@keyframes sunRotate{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+#cur-trail{position:fixed;z-index:99998;pointer-events:none;width:18px;height:18px;transform:translate(-50%,-50%);font-size:13px;line-height:1;opacity:.6;transition:opacity .3s,font-size .3s;filter:drop-shadow(0 0 5px rgba(212,168,67,.6));}
+#cur-trail.hov{font-size:18px;opacity:.85;filter:drop-shadow(0 0 10px rgba(167,139,250,.8));}
 #trailC{position:fixed;inset:0;z-index:99997;pointer-events:none;}
 
-/* ══════════════════════════════════════
-   HERO SPIRAL — INFINITE DRAW, CENTERED
-   JS positions & sizes from live hero rect
-══════════════════════════════════════ */
-#heroSpiralSvg{
-  position:absolute;
-  top:0; left:0;
-  width:100%; height:100%;
-  pointer-events:none;
-  z-index:1;
-  overflow:visible;
-}
-#heroSpiralPath{
-  fill:none;
-  stroke:rgba(196,181,253,0.55);
-  stroke-width:1.5;
-  stroke-linecap:round;
-  stroke-linejoin:round;
-  filter:url(#spGlow);
-  /* dasharray/offset set by JS after path generation */
-}
-#heroSpiralGlow{
-  animation:spTermPulse 4s ease-in-out infinite;
-}
-@keyframes spDraw{
-  from{ stroke-dashoffset:var(--sp-len); }
-  to{   stroke-dashoffset:0; }
-}
-@keyframes spCycle{
-  /* After initial draw, animate dashoffset to simulate
-     infinite spiral being "consumed" inward continuously */
-  0%{   stroke-dashoffset:0; }
-  100%{ stroke-dashoffset:calc(var(--sp-len) * -1); }
-}
-@keyframes spTermPulse{
-  0%,100%{ opacity:0.6; r:10; }
-  50%{     opacity:0.15; r:20; }
-}
-
-/* ══════════════════════════════════════
-   STAR + SPACE CANVAS
-══════════════════════════════════════ */
+/* HERO SPIRAL */
+#heroSpiralSvg{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;overflow:visible;}
+#heroSpiralPath{fill:none;stroke:rgba(196,181,253,0.55);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;filter:url(#spGlow);}
 #spaceC{position:fixed;inset:0;z-index:0;pointer-events:none;}
 
-/* ══════════════════════════════════════
-   NEBULA / ATMOSPHERE
-══════════════════════════════════════ */
+/* NEBULAE */
 .nbl{position:fixed;border-radius:50%;pointer-events:none;z-index:1;mix-blend-mode:screen;}
 .n1{width:900px;height:900px;top:-260px;right:-220px;background:radial-gradient(circle,rgba(109,40,217,.10),rgba(139,92,246,.04) 50%,transparent 72%);filter:blur(80px);animation:nd 22s ease-in-out infinite;}
 .n2{width:700px;height:700px;bottom:-120px;left:-160px;background:radial-gradient(circle,rgba(139,92,246,.08),rgba(109,40,217,.03) 55%,transparent 72%);filter:blur(90px);animation:nd 16s ease-in-out infinite reverse;}
@@ -139,736 +41,392 @@ body{
 .n4{width:320px;height:320px;top:18%;left:6%;background:radial-gradient(circle,rgba(240,171,252,.06),transparent 68%);filter:blur(55px);animation:nd 18s ease-in-out infinite;animation-delay:-6s;}
 .n5{width:600px;height:600px;top:5%;left:50%;transform:translateX(-50%);background:radial-gradient(circle,rgba(196,181,253,.05),transparent 72%);filter:blur(90px);animation:nd 35s ease-in-out infinite;animation-delay:-14s;}
 @keyframes nd{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(25px,-18px) scale(1.04);}66%{transform:translate(-18px,25px) scale(.97);}}
+.grain{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");}
 
-.grain{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.035;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");}
-
-/* ══════════════════════════════════════
-   NAV
-══════════════════════════════════════ */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:300;
-  padding:0 64px;height:80px;
-  display:flex;align-items:center;justify-content:space-between;
-  transition:all .5s;
-}
-nav.solid{
-  background:rgba(14,11,31,.88);
-  backdrop-filter:blur(22px);
-  border-bottom:1px solid var(--line);
-  height:68px;
-  box-shadow:0 2px 40px rgba(0,0,0,.35);
-}
-
-/* Logo group */
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:300;padding:0 64px;height:80px;display:flex;align-items:center;justify-content:space-between;transition:all .5s;}
+nav.solid{background:rgba(14,11,31,.88);backdrop-filter:blur(22px);border-bottom:1px solid var(--line);height:68px;box-shadow:0 2px 40px rgba(0,0,0,.35);}
 .logo-group{display:flex;align-items:center;gap:14px;}
-.logo-sun-svg{
-  width:34px;height:34px;flex-shrink:0;
-  animation:logoSpin 20s linear infinite;
-  filter:drop-shadow(0 0 8px rgba(212,168,67,.6));
-}
+.logo-sun-svg{width:34px;height:34px;flex-shrink:0;animation:logoSpin 20s linear infinite;filter:drop-shadow(0 0 8px rgba(212,168,67,.6));}
 @keyframes logoSpin{to{transform:rotate(360deg);}}
 .logo-text-wrap{display:flex;flex-direction:column;line-height:1;}
-.logo-name{
-  font-family:'Cormorant Upright',serif;
-  font-size:24px;font-weight:400;
-  background:linear-gradient(135deg,var(--p3),var(--rose),var(--gold));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  letter-spacing:.06em;
-  animation:logoGlow 4s ease-in-out infinite;
-}
-@keyframes logoGlow{
-  0%,100%{filter:drop-shadow(0 0 4px rgba(167,139,250,.4));}
-  50%{filter:drop-shadow(0 0 12px rgba(232,121,249,.6));}
-}
-.logo-tag{
-  font-size:10px;letter-spacing:.25em;text-transform:uppercase;
-  color:var(--gold);opacity:.75;margin-top:2px;
-  font-family:'Jost',sans-serif;font-weight:300;
-}
-
+.logo-name{font-family:'Cormorant Upright',serif;font-size:24px;font-weight:400;background:linear-gradient(135deg,var(--p3),var(--rose),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.06em;animation:logoGlow 4s ease-in-out infinite;}
+@keyframes logoGlow{0%,100%{filter:drop-shadow(0 0 4px rgba(167,139,250,.4));}50%{filter:drop-shadow(0 0 12px rgba(232,121,249,.6));}}
+.logo-tag{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);opacity:.75;margin-top:2px;}
 .nav-links{display:flex;gap:36px;list-style:none;}
-.nav-links a{
-  font-size:12px;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--muted);text-decoration:none;transition:color .3s;position:relative;padding-bottom:4px;
-}
-.nav-links a::after{
-  content:'';position:absolute;bottom:0;left:0;width:0;height:1px;
-  background:linear-gradient(to right,var(--p3),var(--gold));
-  transition:width .4s cubic-bezier(.25,.46,.45,.94);
-}
+.nav-links a{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .3s;position:relative;padding-bottom:4px;}
+.nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1px;background:linear-gradient(to right,var(--p3),var(--gold));transition:width .4s cubic-bezier(.25,.46,.45,.94);}
 .nav-links a:hover{color:var(--cream);}
 .nav-links a:hover::after{width:100%;}
-.nav-book{
-  font-family:'Cinzel',serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--gold);text-decoration:none;padding:11px 26px;
-  border:1px solid var(--lng);position:relative;overflow:hidden;transition:all .4s;
-}
-.nav-book::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(212,168,67,.1),rgba(91,33,182,.06));
-  transform:translateX(-101%);transition:transform .4s;
-}
+.nav-book{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);text-decoration:none;padding:11px 26px;border:1px solid var(--lng);position:relative;overflow:hidden;transition:all .4s;}
+.nav-book::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(212,168,67,.1),rgba(91,33,182,.06));transform:translateX(-101%);transition:transform .4s;}
 .nav-book:hover::before{transform:translateX(0);}
 .nav-book:hover{box-shadow:0 0 28px rgba(212,168,67,.22);}
 
-/* ══════════════════════════════════════
-   HERO
-══════════════════════════════════════ */
-.hero{
-  position:relative;z-index:10;
-  min-height:100vh;
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  text-align:center;padding:100px 40px 80px;
-  overflow:hidden;
-  background:radial-gradient(ellipse 70% 55% at 50% -5%, rgba(139,92,246,.25) 0%, rgba(109,40,217,.08) 50%, transparent 75%);
-}
-
-/* Central rotating SVG wreath + sun */
-.hero-emblem{
-  position:absolute;top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  pointer-events:none;z-index:0;
-}
-.emblem-wreath{
-  width:min(580px,88vw);height:min(580px,88vw);
-  opacity:.07;
-  animation:emblemBreath 8s ease-in-out infinite;
-}
-@keyframes emblemBreath{
-  0%,100%{transform:scale(1);opacity:.07;}
-  50%{transform:scale(1.03);opacity:.1;}
-}
-.emblem-ring1{
-  position:absolute;top:50%;left:50%;
-  width:min(460px,72vw);height:min(460px,72vw);
-  border:1px solid rgba(212,168,67,.1);border-radius:50%;
-  transform:translate(-50%,-50%);
-  animation:ringRot 55s linear infinite;
-}
-.emblem-ring2{
-  position:absolute;top:50%;left:50%;
-  width:min(600px,90vw);height:min(600px,90vw);
-  border:1px solid rgba(91,33,182,.07);border-radius:50%;
-  transform:translate(-50%,-50%);
-  animation:ringRot 80s linear infinite reverse;
-}
+/* HERO */
+.hero{position:relative;z-index:10;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 40px 80px;overflow:hidden;background:radial-gradient(ellipse 70% 55% at 50% -5%,rgba(139,92,246,.25) 0%,rgba(109,40,217,.08) 50%,transparent 75%);}
+.hero::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:3px;height:65%;background:linear-gradient(to bottom,rgba(196,181,253,0) 0%,rgba(196,181,253,.3) 20%,rgba(226,185,90,.15) 65%,transparent 100%);filter:blur(5px);pointer-events:none;z-index:0;animation:lightShaft 6s ease-in-out infinite;}
+.hero::after{content:'';position:absolute;top:-40px;left:50%;transform:translateX(-50%);width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(196,181,253,.2) 0%,rgba(139,92,246,.07) 50%,transparent 75%);filter:blur(45px);pointer-events:none;z-index:0;animation:lightShaft 6s ease-in-out infinite;}
+@keyframes lightShaft{0%,100%{opacity:.65;}50%{opacity:1;}}
+.hero-emblem{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:0;}
+.emblem-wreath{width:min(580px,88vw);height:min(580px,88vw);opacity:.07;animation:emblemBreath 8s ease-in-out infinite;}
+@keyframes emblemBreath{0%,100%{transform:scale(1);opacity:.07;}50%{transform:scale(1.03);opacity:.1;}}
+.emblem-ring1{position:absolute;top:50%;left:50%;width:min(460px,72vw);height:min(460px,72vw);border:1px solid rgba(212,168,67,.1);border-radius:50%;transform:translate(-50%,-50%);animation:ringRot 55s linear infinite;}
+.emblem-ring2{position:absolute;top:50%;left:50%;width:min(600px,90vw);height:min(600px,90vw);border:1px solid rgba(91,33,182,.07);border-radius:50%;transform:translate(-50%,-50%);animation:ringRot 80s linear infinite reverse;}
 @keyframes ringRot{from{transform:translate(-50%,-50%) rotate(0deg);}to{transform:translate(-50%,-50%) rotate(360deg);}}
-
-/* Floating planetary symbols */
-.fp{
-  position:absolute;font-family:'Cinzel',serif;
-  pointer-events:none;z-index:1;
-  opacity:.2;font-size:var(--fs,13px);color:var(--p3);
-  text-shadow:0 0 8px var(--p2);
-  animation:fpOrbit var(--fd,16s) linear infinite;
-}
-@keyframes fpOrbit{
-  from{transform:rotate(var(--fa,0deg)) translateX(var(--fr,170px)) rotate(calc(var(--fa,0deg)*-1));}
-  to{transform:rotate(calc(var(--fa,0deg)+360deg)) translateX(var(--fr,170px)) rotate(calc((var(--fa,0deg)+360deg)*-1));}
-}
-
+.fp{position:absolute;font-family:'Cinzel',serif;pointer-events:none;z-index:1;opacity:.2;font-size:var(--fs,13px);color:var(--p3);text-shadow:0 0 8px var(--p2);animation:fpOrbit var(--fd,16s) linear infinite;}
+@keyframes fpOrbit{from{transform:rotate(var(--fa,0deg)) translateX(var(--fr,170px)) rotate(calc(var(--fa,0deg)*-1));}to{transform:rotate(calc(var(--fa,0deg)+360deg)) translateX(var(--fr,170px)) rotate(calc((var(--fa,0deg)+360deg)*-1));}}
 .hero-content{position:relative;z-index:5;}
-
-/* hero-logo removed — logo lives only in nav */
-
-.hero-h{
-  font-family:'EB Garamond',serif;
-  font-size:clamp(28px,4.5vw,56px);font-style:italic;
-  font-weight:400;color:rgba(248,244,255,.9);
-  line-height:1.4;margin-top:0;
-  text-shadow:0 0 60px rgba(196,181,253,.35), 0 2px 20px rgba(0,0,0,.3);
-  opacity:0;animation:riseUp 1s .2s forwards;
-}
-.hero-sub{
-  max-width:560px;margin:18px auto 0;
-  font-size:16px;line-height:1.9;color:rgba(196,181,253,.8);letter-spacing:.03em;
-  opacity:0;animation:riseUp 1s .4s forwards;
-}
-.hero-btns{
-  display:flex;gap:18px;justify-content:center;margin-top:36px;
-  opacity:0;animation:riseUp 1s .6s forwards;
-}
-.hbp{
-  font-family:'Cinzel',serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
-  text-decoration:none;padding:15px 42px;
-  background:linear-gradient(135deg,var(--p1),var(--p2));
-  color:white;position:relative;overflow:hidden;transition:all .4s;
-  box-shadow:0 4px 40px rgba(91,33,182,.4),0 0 0 1px rgba(167,139,250,.18);
-}
-.hbp::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(135deg,var(--p2),var(--rose));
-  opacity:0;transition:opacity .4s;
-}
+.hero-h{font-family:'EB Garamond',serif;font-size:clamp(28px,4.5vw,56px);font-style:italic;font-weight:400;color:rgba(248,244,255,.9);line-height:1.4;text-shadow:0 0 60px rgba(196,181,253,.35),0 2px 20px rgba(0,0,0,.3);opacity:0;animation:riseUp 1s .2s forwards;}
+.hero-sub{max-width:560px;margin:18px auto 0;font-size:16px;line-height:1.9;color:rgba(196,181,253,.8);letter-spacing:.03em;opacity:0;animation:riseUp 1s .4s forwards;}
+.hero-btns{display:flex;gap:18px;justify-content:center;margin-top:36px;opacity:0;animation:riseUp 1s .6s forwards;}
+.hbp{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;padding:15px 42px;background:linear-gradient(135deg,var(--p1),var(--p2));color:white;position:relative;overflow:hidden;transition:all .4s;box-shadow:0 4px 40px rgba(91,33,182,.4),0 0 0 1px rgba(167,139,250,.18);}
+.hbp::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--p2),var(--rose));opacity:0;transition:opacity .4s;}
 .hbp:hover::after{opacity:1;}
 .hbp:hover{box-shadow:0 8px 60px rgba(124,58,237,.6);}
 .hbp span{position:relative;z-index:1;}
-.hbs{
-  font-family:'Cinzel',serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
-  text-decoration:none;padding:15px 42px;
-  border:1px solid rgba(212,168,67,.3);color:var(--gold);
-  position:relative;overflow:hidden;transition:all .4s;
-}
-.hbs::before{
-  content:'';position:absolute;inset:0;
-  background:rgba(212,168,67,.06);
-  transform:scaleX(0);transform-origin:left;transition:transform .4s;
-}
+.hbs{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;padding:15px 42px;border:1px solid rgba(212,168,67,.3);color:var(--gold);position:relative;overflow:hidden;transition:all .4s;}
+.hbs::before{content:'';position:absolute;inset:0;background:rgba(212,168,67,.06);transform:scaleX(0);transform-origin:left;transition:transform .4s;}
 .hbs:hover::before{transform:scaleX(1);}
 .hbs:hover{border-color:rgba(212,168,67,.6);box-shadow:0 0 30px rgba(212,168,67,.15);}
-
-.moon-strip{
-  display:flex;gap:14px;align-items:center;justify-content:center;margin-top:36px;
-  opacity:0;animation:riseUp 1s .8s forwards;
-}
+.moon-strip{display:flex;gap:14px;align-items:center;justify-content:center;margin-top:36px;opacity:0;animation:riseUp 1s .8s forwards;}
 .moon-strip span{font-size:clamp(12px,2vw,17px);transition:all .35s;cursor:none;}
-.moon-strip span:nth-child(3){
-  font-size:clamp(18px,3vw,26px);
-  filter:drop-shadow(0 0 12px rgba(240,200,106,.9));
-  animation:moonG 3s ease-in-out infinite;
-}
-@keyframes moonG{
-  0%,100%{filter:drop-shadow(0 0 12px rgba(240,200,106,.9));}
-  50%{filter:drop-shadow(0 0 28px rgba(240,200,106,1)) drop-shadow(0 0 56px rgba(240,200,106,.5));}
-}
+.moon-strip span:nth-child(3){font-size:clamp(18px,3vw,26px);filter:drop-shadow(0 0 12px rgba(240,200,106,.9));animation:moonG 3s ease-in-out infinite;}
+@keyframes moonG{0%,100%{filter:drop-shadow(0 0 12px rgba(240,200,106,.9));}50%{filter:drop-shadow(0 0 28px rgba(240,200,106,1)) drop-shadow(0 0 56px rgba(240,200,106,.5));}}
 .moon-strip span:nth-child(2),.moon-strip span:nth-child(4){opacity:.5;}
 .moon-strip span:nth-child(1),.moon-strip span:nth-child(5){opacity:.18;}
-
-.scroll-b{
-  position:absolute;bottom:32px;left:50%;transform:translateX(-50%);
-  display:flex;flex-direction:column;align-items:center;gap:8px;z-index:5;
-  opacity:0;animation:riseUp 1s 1.4s forwards;
-}
+.scroll-b{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;z-index:5;opacity:0;animation:riseUp 1s 1.4s forwards;}
 .scroll-b span{font-size:10px;letter-spacing:.4em;text-transform:uppercase;color:var(--muted);}
 .scroll-p{width:1px;height:50px;position:relative;overflow:hidden;}
-.scroll-p::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(to bottom,var(--p3),var(--gold),transparent);
-  animation:pd 2.2s ease-in-out infinite;
-}
+.scroll-p::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,var(--p3),var(--gold),transparent);animation:pd 2.2s ease-in-out infinite;}
 @keyframes pd{0%{transform:translateY(-100%);}100%{transform:translateY(200%);}}
 @keyframes riseUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
 
-/* ══════════════════════════════════════
-   MARQUEE STRIP
-══════════════════════════════════════ */
-.mq-wrap{
-  position:relative;z-index:10;
-  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
-  padding:16px 0;overflow:hidden;
-  background:linear-gradient(to right,var(--ink),var(--panel),var(--ink));
-}
+/* MARQUEE */
+.mq-wrap{position:relative;z-index:10;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0;overflow:hidden;background:linear-gradient(to right,var(--ink),var(--panel),var(--ink));}
 .mq-track{display:flex;width:max-content;animation:marq 32s linear infinite;}
 .mq-track:hover{animation-play-state:paused;}
 @keyframes marq{from{transform:translateX(0);}to{transform:translateX(-50%);}}
-.mq-item{
-  display:flex;align-items:center;gap:22px;padding:0 36px;
-  font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);white-space:nowrap;
-}
+.mq-item{display:flex;align-items:center;gap:22px;padding:0 36px;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
 .mq-sun{font-size:13px;color:var(--gold);animation:sunRotate 6s linear infinite;}
 
-/* ══════════════════════════════════════
-   SACRED DIVIDER
-══════════════════════════════════════ */
-.s-div{
-  position:relative;z-index:10;
-  display:flex;align-items:center;gap:20px;
-  max-width:960px;margin:0 auto;padding:28px 80px;
-}
+/* DIVIDER */
+.s-div{position:relative;z-index:10;display:flex;align-items:center;gap:20px;max-width:960px;margin:0 auto;padding:28px 80px;}
 .s-div-l{flex:1;height:1px;background:linear-gradient(to right,transparent,var(--line),transparent);}
 .s-div-c{display:flex;align-items:center;gap:12px;}
 .s-div-c svg{width:22px;height:22px;animation:sunRotate 12s linear infinite;opacity:.5;}
 .s-div-c span{color:var(--gold);font-size:11px;opacity:.6;animation:tw 3s ease-in-out infinite;}
-.s-div-c span:nth-child(2){animation-delay:.5s;}
 @keyframes tw{0%,100%{opacity:.3;transform:scale(.8);}50%{opacity:.8;transform:scale(1.1);}}
 
-/* ══════════════════════════════════════
-   SECTION UTILITY
-══════════════════════════════════════ */
+/* SECTION UTILITY */
 .sw{position:relative;z-index:10;}
 .sl{font-size:11px;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:14px;}
-.sh{
-  font-family:'Cormorant Upright',serif;
-  font-size:clamp(28px,4.5vw,54px);font-weight:400;line-height:1.2;
-  color:var(--cream);
-}
+.sh{font-family:'Cormorant Upright',serif;font-size:clamp(28px,4.5vw,54px);font-weight:400;line-height:1.2;color:var(--cream);}
 .sh em{font-style:italic;color:var(--p3);font-family:'EB Garamond',serif;font-size:1.1em;}
-
 .rev{opacity:0;transform:translateY(28px);transition:opacity .85s ease,transform .85s ease;}
 .rev.vi{opacity:1;transform:none;}
 .d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}.d4{transition-delay:.4s;}
 
-/* ══════════════════════════════════════
-   ABOUT
-══════════════════════════════════════ */
+/* ABOUT */
 .about-w{max-width:1240px;margin:0 auto;padding:90px 80px;}
 .about-g{display:grid;grid-template-columns:1fr 1.1fr;gap:72px;align-items:center;}
-
-/* Spirilumen-branded visual: wreath sphere */
-.brand-sphere{
-  width:320px;height:320px;position:relative;margin:0 auto;
-}
-.bs-wreath{
-  position:absolute;inset:0;
-  animation:wreathSpin 40s linear infinite;
-  opacity:.55;
-}
-.bs-inner{
-  position:absolute;inset:40px;border-radius:50%;
-  background:radial-gradient(ellipse at 35% 32%,
-    rgba(196,181,253,.45),rgba(109,40,217,.28) 40%,rgba(14,11,31,.9) 75%);
-  border:1px solid rgba(139,92,246,.35);
-  box-shadow:0 0 80px rgba(139,92,246,.35),0 0 160px rgba(139,92,246,.12),inset 0 0 60px rgba(139,92,246,.15);
-  display:flex;align-items:center;justify-content:center;
-  overflow:hidden;
-}
-.bs-inner::after{
-  content:'';position:absolute;inset:20%;border-radius:50%;
-  background:radial-gradient(circle,rgba(212,168,67,.25),transparent 70%);
-  animation:iP 5s ease-in-out infinite;
-}
+.brand-sphere{width:320px;height:320px;position:relative;margin:0 auto;}
+.bs-wreath{position:absolute;inset:0;animation:wreathSpin 40s linear infinite;opacity:.55;}
+.bs-inner{position:absolute;inset:40px;border-radius:50%;background:radial-gradient(ellipse at 35% 32%,rgba(196,181,253,.45),rgba(109,40,217,.28) 40%,rgba(14,11,31,.9) 75%);border:1px solid rgba(139,92,246,.35);box-shadow:0 0 80px rgba(139,92,246,.35),0 0 160px rgba(139,92,246,.12),inset 0 0 60px rgba(139,92,246,.15);display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.bs-inner::after{content:'';position:absolute;inset:20%;border-radius:50%;background:radial-gradient(circle,rgba(212,168,67,.25),transparent 70%);animation:iP 5s ease-in-out infinite;}
 @keyframes iP{0%,100%{transform:scale(1);opacity:.7;}50%{transform:scale(1.4);opacity:.3;}}
-.bs-sun{
-  position:relative;z-index:1;
-  width:72px;height:72px;
-  filter:drop-shadow(0 0 20px rgba(212,168,67,.8)) drop-shadow(0 0 50px rgba(212,168,67,.4));
-  animation:sunRotate 15s linear infinite;
-}
+.bs-sun{position:relative;z-index:1;width:72px;height:72px;filter:drop-shadow(0 0 20px rgba(212,168,67,.8)) drop-shadow(0 0 50px rgba(212,168,67,.4));animation:sunRotate 15s linear infinite;}
 @keyframes wreathSpin{to{transform:rotate(360deg);}}
-
-/* orbit dots */
-.bs-orb{
-  position:absolute;top:50%;left:50%;border-radius:50%;border:1px solid;
-  transform:translate(-50%,-50%);
-  animation:orbs var(--od,25s) linear infinite var(--odir,normal);
-}
+.bs-orb{position:absolute;top:50%;left:50%;border-radius:50%;border:1px solid;transform:translate(-50%,-50%);animation:orbs var(--od,25s) linear infinite var(--odir,normal);}
 .bo1{width:340px;height:340px;border-color:rgba(91,33,182,.15);--od:35s;}
 .bo2{width:390px;height:390px;border-color:rgba(212,168,67,.08);--od:50s;--odir:reverse;}
-.bp-dot{
-  position:absolute;top:0;left:50%;
-  transform:translateX(-50%) translateY(-50%);
-  border-radius:50%;
-}
+.bp-dot{position:absolute;top:0;left:50%;transform:translateX(-50%) translateY(-50%);border-radius:50%;}
 .bd1{width:8px;height:8px;background:var(--gold);box-shadow:0 0 12px var(--gold);}
 .bd2{width:6px;height:6px;background:var(--p3);box-shadow:0 0 9px var(--p3);}
 @keyframes orbs{from{transform:translate(-50%,-50%) rotate(0deg);}to{transform:translate(-50%,-50%) rotate(360deg);}}
-
-.about-desc{
-  font-family:'EB Garamond',serif;font-size:18px;line-height:1.9;
-  color:rgba(237,233,254,.8);margin-top:22px;
-}
+.about-desc{font-family:'EB Garamond',serif;font-size:18px;line-height:1.9;color:rgba(237,233,254,.8);margin-top:22px;}
 .about-desc em{color:var(--cream);font-style:italic;}
 .stats-row{display:flex;gap:0;margin-top:52px;border:1px solid var(--line);}
-.stat{
-  flex:1;padding:26px 20px;border-right:1px solid var(--line);
-  position:relative;overflow:hidden;transition:background .4s;
-}
+.stat{flex:1;padding:26px 20px;border-right:1px solid var(--line);position:relative;overflow:hidden;transition:background .4s;}
 .stat:last-child{border-right:none;}
-.stat::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  background:linear-gradient(to right,var(--p2),var(--gold));
-  transform:scaleX(0);transform-origin:left;transition:transform .55s;
-}
+.stat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,var(--p2),var(--gold));transform:scaleX(0);transform-origin:left;transition:transform .55s;}
 .stat:hover::before{transform:scaleX(1);}
 .stat:hover{background:rgba(91,33,182,.05);}
-.stat-n{
-  font-family:'Cormorant Upright',serif;font-size:38px;font-weight:400;
-  color:var(--gold);line-height:1;text-shadow:0 0 20px rgba(212,168,67,.35);
-}
+.stat-n{font-family:'Cormorant Upright',serif;font-size:38px;font-weight:400;color:var(--gold);line-height:1;text-shadow:0 0 20px rgba(212,168,67,.35);}
 .stat-l{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:8px;display:block;}
 
 /* ══════════════════════════════════════
-   SERVICES
+   SERVICES — 3 CATEGORIES + SUBCARDS
 ══════════════════════════════════════ */
-.svc-w{
-  padding:80px 80px;position:relative;
-  max-width:1240px;margin:0 auto;
-}
-.svc-hdr{text-align:center;margin-bottom:56px;}
-/* top row — 3 cards */
-.svc-g{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:18px;background:none;border:none;
-}
-/* bottom row — 2 wider cards */
-.svc-g2{
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:18px;margin-top:18px;background:none;border:none;
-}
+.svc-w{padding:80px 80px;max-width:1320px;margin:0 auto;}
+.svc-hdr{text-align:center;margin-bottom:64px;}
 
-/* ── individual card ── */
-.svc-c{
-  background:linear-gradient(148deg,rgba(22,17,52,.92) 0%,rgba(14,11,35,.95) 100%);
+/* 3-column category grid */
+.svc-cats{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:start;}
+
+/* Category column wrapper */
+.svc-cat{display:flex;flex-direction:column;}
+
+/* Category header */
+.cat-header{
+  padding:30px 28px 24px;
+  background:linear-gradient(148deg,rgba(28,21,62,.96) 0%,rgba(16,12,38,.98) 100%);
+  border:1px solid rgba(139,92,246,.22);
+  border-radius:20px 20px 0 0;
+  position:relative;overflow:hidden;
+}
+.cat-header::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--p2),var(--gold),var(--rose),var(--p2));
+  background-size:200% 100%;
+  animation:shimmerLine 4s linear infinite;
+}
+@keyframes shimmerLine{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+.cat-header::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 90% -10%,rgba(212,168,67,.07),transparent 55%);pointer-events:none;}
+.cat-num{font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:var(--gold);opacity:.65;margin-bottom:10px;display:block;position:relative;z-index:1;}
+.cat-icon{font-size:28px;margin-bottom:10px;display:inline-block;filter:drop-shadow(0 0 10px rgba(167,139,250,.5));animation:iconFloat 4s ease-in-out infinite;position:relative;z-index:1;}
+@keyframes iconFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
+.cat-title{font-family:'Cormorant Upright',serif;font-size:22px;font-weight:400;color:var(--cream);line-height:1.25;position:relative;z-index:1;}
+
+/* Sub-cards container */
+.sub-cards{
+  display:flex;flex-direction:column;
   border:1px solid rgba(139,92,246,.14);
-  border-radius:22px;
-  padding:44px 34px 38px;
-  position:relative;overflow:hidden;cursor:none;
-  backdrop-filter:blur(14px);
-  box-shadow:0 2px 28px rgba(0,0,0,.3),
-             inset 0 1px 0 rgba(196,181,253,.05);
-  transition:transform .4s cubic-bezier(.25,.46,.45,.94),
-             box-shadow .4s,border-color .4s;
-  position: relative;
-  overflow: hidden;
-
-  background-image: url('bg_2.png'); /* change per card */
-  background-size: cover;
-  background-position: center;
-  background-blend-mode: multiply;
-  background-color: rgba(10, 8, 25, 0.4);
-   backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  border-top:none;
+  border-radius:0 0 20px 20px;
+  overflow:hidden;
+  flex:1;
 }
 
-.svc-c > *{
-  position: relative;
-  z-index: 2;
+/* Individual sub-card */
+.sub-card{
+  padding:20px 28px 22px;
+  background:linear-gradient(148deg,rgba(18,14,42,.92) 0%,rgba(12,10,30,.96) 100%);
+  border-bottom:1px solid rgba(139,92,246,.09);
+  position:relative;overflow:hidden;
+  transition:background .35s,padding-left .35s;
+  cursor:none;
 }
-.svc-c:hover{
-  transform:translateY(-7px);
-  border-color:rgba(139,92,246,.3);
-  box-shadow:0 18px 52px rgba(0,0,0,.38),
-             0 0 28px rgba(91,33,182,.08),
-             inset 0 1px 0 rgba(196,181,253,.08);
-			 
-  
-			 
-		 
+.sub-card:last-child{border-bottom:none;}
+
+/* Left accent bar */
+.sub-card::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(to bottom,var(--p2),var(--gold));
+  transform:scaleY(0);transform-origin:bottom;
+  transition:transform .4s cubic-bezier(.25,.46,.45,.94);
+  border-radius:0 2px 2px 0;
+}
+.sub-card:hover::before{transform:scaleY(1);}
+.sub-card:hover{
+  background:linear-gradient(148deg,rgba(26,19,58,.96) 0%,rgba(16,13,40,.98) 100%);
+  padding-left:36px;
 }
 
-/* Radial mouse-follow glow */
-.svc-c::before{
-  content:'';position:absolute;
-  width:260px;height:260px;border-radius:50%;
-  background:radial-gradient(circle,rgba(91,33,182,.12),transparent 68%);
-  top:var(--my,-70px);left:var(--mx,-70px);
-  transform:translate(-50%,-50%);
-  opacity:.7;transition:opacity .4s;pointer-events:none;
+/* Mouse-follow glow */
+.sub-card::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at var(--mx,50%) var(--my,50%),rgba(91,33,182,.09),transparent 62%);
+  opacity:0;transition:opacity .35s;pointer-events:none;
 }
-.svc-c:hover::before{opacity:1;}
+.sub-card:hover::after{opacity:1;}
 
-/* Shimmer line across top edge on hover */
-.svc-c::after{
-  content:'';position:absolute;top:0;left:12%;right:12%;height:1px;
-  border-radius:1px;
-  background:linear-gradient(to right,transparent,rgba(196,181,253,.45),rgba(226,185,90,.35),rgba(196,181,253,.45),transparent);
-  opacity:0;transform:scaleX(0);transform-origin:center;
-  transition:transform .55s cubic-bezier(.25,.46,.45,.94),opacity .4s;
-  content:'';
-  position:absolute;
-  inset:0;
+/* Letter badge */
+.sub-letter{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:22px;height:22px;border-radius:50%;
+  border:1px solid rgba(139,92,246,.28);
+  font-family:'Cinzel',serif;font-size:10px;color:var(--p3);
+  margin-bottom:8px;background:rgba(91,33,182,.07);
+  transition:border-color .35s,background .35s,color .35s;
+}
+.sub-card:hover .sub-letter{border-color:var(--gold);background:rgba(212,168,67,.12);color:var(--gold);}
 
-  background: linear-gradient(
-    180deg,
-    rgba(8,6,20,0.65),
-    rgba(5,4,15,0.88)
-  );
+.sub-name{font-family:'Cormorant Upright',serif;font-size:17px;font-weight:400;color:var(--cream);margin-bottom:6px;line-height:1.2;}
+.sub-desc{font-size:13px;line-height:1.75;color:var(--muted);}
 
-  z-index:1;
-}
-.svc-c:hover::after{opacity:1;transform:scaleX(1);}
+.sub-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px;}
+.sub-tag{font-size:10px;letter-spacing:.04em;color:var(--p3);border:1px solid rgba(139,92,246,.14);border-radius:40px;padding:3px 10px;background:rgba(91,33,182,.06);transition:background .3s,border-color .3s;}
+.sub-card:hover .sub-tag{border-color:rgba(139,92,246,.28);background:rgba(91,33,182,.12);}
 
-/* Icon */
-.svc-ic{
-  font-size:34px;margin-bottom:20px;display:inline-block;line-height:1;
-  transition:transform .5s cubic-bezier(.34,1.56,.64,1),filter .5s;
-  filter:drop-shadow(0 0 5px rgba(167,139,250,.22));
-}
-.svc-c:hover .svc-ic{
-  transform:scale(1.18) rotate(-6deg);
-  filter:drop-shadow(0 0 16px rgba(167,139,250,.7));
-}
+.sub-lnk{display:inline-flex;align-items:center;gap:6px;margin-top:11px;font-family:'Cinzel',serif;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);text-decoration:none;opacity:.7;transition:gap .3s,opacity .3s;}
+.sub-lnk:hover{gap:10px;opacity:1;}
 
-/* Category label */
-.svc-nm{
-  font-size:10px;letter-spacing:.3em;text-transform:uppercase;
-  color:var(--p3);margin-bottom:12px;display:block;opacity:.75;
-}
-/* Service title */
-.svc-name{
-  font-family:'Cormorant Upright',serif;font-size:26px;font-weight:400;
-  line-height:1.2;margin-bottom:12px;
-}
-/* Description */
-.svc-desc{font-size:14px;line-height:1.9;color:var(--muted);margin-bottom:20px;}
-
-/* Tags — pill shaped */
-.svc-tags{display:flex;flex-wrap:wrap;gap:7px;}
-.svc-tag{
-  font-size:10px;letter-spacing:.06em;color:var(--p3);
-  border:1px solid rgba(139,92,246,.18);
-  border-radius:40px;
-  padding:4px 13px;
-  background:rgba(91,33,182,.07);
-  transition:background .3s,border-color .3s,color .3s;
-}
-.svc-c:hover .svc-tag{
-  border-color:rgba(139,92,246,.35);
-  background:rgba(91,33,182,.14);
-  color:var(--p4);
-}
-
-/* Explore link */
-.svc-lnk{
-  display:inline-flex;align-items:center;gap:8px;margin-top:26px;
-  font-family:'Cinzel',serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--gold);text-decoration:none;opacity:.8;
-  transition:gap .35s,opacity .3s,text-shadow .35s;
-}
-.svc-lnk:hover{gap:14px;opacity:1;text-shadow:0 0 12px rgba(212,168,67,.55);}
-
-/* ══════════════════════════════════════
-   PROCESS
-══════════════════════════════════════ */
+/* PROCESS */
 .proc-w{max-width:1200px;margin:0 auto;padding:80px 80px;}
-.proc-steps{
-  display:grid;grid-template-columns:repeat(4,1fr);
-  position:relative;margin-top:56px;
-}
-.proc-steps::before{
-  content:'';position:absolute;top:36px;
-  left:calc(12.5% + 36px);right:calc(12.5% + 36px);
-  height:1px;
-  background:linear-gradient(to right,transparent,var(--p2),var(--gold),var(--p2),transparent);
-  z-index:0;
-}
+.proc-steps{display:grid;grid-template-columns:repeat(4,1fr);position:relative;margin-top:56px;}
+.proc-steps::before{content:'';position:absolute;top:36px;left:calc(12.5% + 36px);right:calc(12.5% + 36px);height:1px;background:linear-gradient(to right,transparent,var(--p2),var(--gold),var(--p2),transparent);z-index:0;}
 .ps{padding:0 24px;position:relative;z-index:1;}
-.ps-num{
-  width:72px;height:72px;border-radius:50%;
-  border:1px solid rgba(139,92,246,.4);
-  background:linear-gradient(135deg, rgba(109,40,217,.25), rgba(26,21,53,.8));
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Cormorant Upright',serif;font-size:26px;font-weight:400;color:var(--p3);
-  margin-bottom:30px;transition:all .5s;position:relative;
-  box-shadow:0 0 20px rgba(139,92,246,.2), inset 0 0 15px rgba(139,92,246,.08);
-}
-.ps-num::after{
-  content:'';position:absolute;inset:-5px;border-radius:50%;
-  border:1px solid transparent;transition:all .5s;
-}
-.ps:hover .ps-num{
-  background:rgba(91,33,182,.18);border-color:var(--p2);color:var(--cream);
-  box-shadow:0 0 30px rgba(91,33,182,.4),inset 0 0 20px rgba(91,33,182,.15);
-}
-.ps:hover .ps-num::after{
-  border-color:rgba(91,33,182,.18);
-  box-shadow:0 0 50px rgba(91,33,182,.2);
-}
+.ps-num{width:72px;height:72px;border-radius:50%;border:1px solid rgba(139,92,246,.4);background:linear-gradient(135deg,rgba(109,40,217,.25),rgba(26,21,53,.8));display:flex;align-items:center;justify-content:center;font-family:'Cormorant Upright',serif;font-size:26px;font-weight:400;color:var(--p3);margin-bottom:30px;transition:all .5s;position:relative;box-shadow:0 0 20px rgba(139,92,246,.2),inset 0 0 15px rgba(139,92,246,.08);}
+.ps-num::after{content:'';position:absolute;inset:-5px;border-radius:50%;border:1px solid transparent;transition:all .5s;}
+.ps:hover .ps-num{background:rgba(91,33,182,.18);border-color:var(--p2);color:var(--cream);box-shadow:0 0 30px rgba(91,33,182,.4),inset 0 0 20px rgba(91,33,182,.15);}
+.ps:hover .ps-num::after{border-color:rgba(91,33,182,.18);box-shadow:0 0 50px rgba(91,33,182,.2);}
 .ps-t{font-family:'Cormorant Upright',serif;font-size:22px;font-weight:400;margin-bottom:12px;}
 .ps-d{font-size:14px;line-height:1.85;color:var(--muted);}
 
 /* ══════════════════════════════════════
-   TESTIMONIALS
+   TESTIMONIALS — ROUNDED & PROFESSIONAL
 ══════════════════════════════════════ */
 .tst-w{padding:80px 80px;position:relative;overflow:hidden;}
-.tst-w::before{
-  content:'';position:absolute;inset:0;z-index:0;
-  background:radial-gradient(ellipse at 30% 50%,rgba(91,33,182,.06),transparent 55%),
-             radial-gradient(ellipse at 70% 50%,rgba(212,168,67,.04),transparent 55%);
-}
+.tst-w::before{content:'';position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse at 30% 50%,rgba(91,33,182,.06),transparent 55%),radial-gradient(ellipse at 70% 50%,rgba(212,168,67,.04),transparent 55%);}
 .tst-i{max-width:1200px;margin:0 auto;position:relative;z-index:1;}
 .tst-hdr{text-align:center;margin-bottom:52px;}
-.tst-g{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+.tst-g{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+
+/* The testimonial card itself */
 .tc{
-  background:linear-gradient(160deg, var(--card) 0%, #221d45 100%);border:1px solid var(--line);
-  padding:46px 34px;position:relative;overflow:hidden;
-  transition:all .5s cubic-bezier(.25,.46,.45,.94);
+  background:linear-gradient(160deg,rgba(26,20,56,.96) 0%,rgba(18,14,42,.98) 100%);
+  border:1px solid rgba(139,92,246,.15);
+  border-radius:24px;
+  padding:38px 34px 34px;
+  position:relative;overflow:hidden;
+  transition:transform .5s cubic-bezier(.25,.46,.45,.94),
+             box-shadow .5s,border-color .5s;
+  box-shadow:0 4px 30px rgba(0,0,0,.25),
+             inset 0 1px 0 rgba(196,181,253,.05);
 }
+
+/* Shimmer top line */
 .tc::before{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse at 50% -10%,rgba(91,33,182,.09),transparent 60%);
-  opacity:0;transition:opacity .5s;
+  content:'';position:absolute;top:0;left:14%;right:14%;height:1px;
+  background:linear-gradient(to right,transparent,rgba(196,181,253,.38),rgba(226,185,90,.28),rgba(196,181,253,.38),transparent);
+  border-radius:1px;opacity:.65;
+  transition:left .5s,right .5s,opacity .5s;
 }
+
+/* Hover radial glow */
 .tc::after{
-  content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
-  background:linear-gradient(to right,transparent,var(--p2),var(--gold),transparent);
-  transform:scaleX(0);transition:transform .6s;
+  content:'';position:absolute;inset:0;border-radius:24px;
+  background:radial-gradient(ellipse at 50% -5%,rgba(91,33,182,.09),transparent 62%);
+  opacity:0;transition:opacity .5s;pointer-events:none;
 }
-.tc:hover{transform:translateY(-7px);border-color:rgba(124,58,237,.32);box-shadow:0 20px 60px rgba(91,33,182,.18);}
-.tc:hover::before{opacity:1;}
-.tc:hover::after{transform:scaleX(1);}
+.tc:hover{
+  transform:translateY(-8px);
+  border-color:rgba(139,92,246,.3);
+  box-shadow:0 24px 60px rgba(0,0,0,.36),
+             0 0 36px rgba(91,33,182,.1),
+             inset 0 1px 0 rgba(196,181,253,.09);
+}
+.tc:hover::before{left:6%;right:6%;opacity:1;}
+.tc:hover::after{opacity:1;}
+
+/* Bottom accent line */
+.tc-bottom-line{
+  position:absolute;bottom:0;left:20%;right:20%;height:1px;
+  background:linear-gradient(to right,transparent,var(--gold),transparent);
+  transform:scaleX(0);
+  transition:transform .6s cubic-bezier(.25,.46,.45,.94),left .4s,right .4s;
+  border-radius:1px;
+}
+.tc:hover .tc-bottom-line{transform:scaleX(1);left:10%;right:10%;}
+
+/* Big decorative quote mark */
+.tc-quote-icon{
+  position:absolute;top:28px;right:30px;
+  font-size:56px;line-height:.65;
+  font-family:'EB Garamond',serif;
+  color:var(--p2);opacity:.1;
+  transition:opacity .4s;user-select:none;pointer-events:none;
+}
+.tc:hover .tc-quote-icon{opacity:.2;}
+
+/* Stars */
 .tc-stars{display:flex;gap:4px;margin-bottom:18px;}
-.tc-stars span{
-  color:var(--gold);font-size:12px;
-  text-shadow:0 0 8px rgba(212,168,67,.6);
-  animation:stTw 2.5s ease-in-out infinite;
-}
-.tc-stars span:nth-child(n+2){animation-delay:calc(.15s*(var(--i,1)));}
+.tc-stars span{color:var(--gold);font-size:12px;text-shadow:0 0 8px rgba(212,168,67,.6);animation:stTw 2.5s ease-in-out infinite;}
+.tc-stars span:nth-child(2){animation-delay:.15s;}
+.tc-stars span:nth-child(3){animation-delay:.3s;}
+.tc-stars span:nth-child(4){animation-delay:.45s;}
+.tc-stars span:nth-child(5){animation-delay:.6s;}
 @keyframes stTw{0%,100%{opacity:1;}50%{opacity:.55;}}
+
+/* Quote text */
 .tc-q{
-  font-family:'EB Garamond',serif;font-size:17px;font-style:italic;
-  line-height:1.8;color:rgba(237,233,254,.92);margin-bottom:28px;
-  padding-left:18px;position:relative;
+  font-family:'EB Garamond',serif;font-size:16.5px;font-style:italic;
+  line-height:1.82;color:rgba(237,233,254,.88);
+  margin-bottom:26px;position:relative;z-index:1;
 }
-.tc-q::before{
-  content:'\201C';position:absolute;left:0;top:-8px;
-  font-size:56px;line-height:.65;color:var(--p2);opacity:.3;
+
+/* Separator line */
+.tc-sep{
+  height:1px;
+  background:linear-gradient(to right,transparent,rgba(139,92,246,.18),transparent);
+  margin-bottom:22px;
 }
-.tc-a{display:flex;align-items:center;gap:13px;}
+
+/* Author row */
+.tc-a{display:flex;align-items:center;gap:14px;position:relative;z-index:1;}
 .ta-av{
-  width:42px;height:42px;border-radius:50%;
+  width:44px;height:44px;border-radius:50%;
   background:linear-gradient(135deg,var(--p1),var(--p2),var(--rose));
   display:flex;align-items:center;justify-content:center;
-  font-family:'Cinzel',serif;font-size:14px;color:white;
-  box-shadow:0 0 18px rgba(91,33,182,.42);flex-shrink:0;
+  font-family:'Cinzel',serif;font-size:15px;color:white;
+  box-shadow:0 0 18px rgba(91,33,182,.4);flex-shrink:0;
+  transition:box-shadow .4s;
 }
-.ta-n{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.07em;}
-.ta-r{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:3px;}
+.tc:hover .ta-av{box-shadow:0 0 28px rgba(91,33,182,.6),0 0 56px rgba(91,33,182,.2);}
+.ta-n{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.07em;color:var(--cream);}
+.ta-r{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:3px;}
 
-/* Divine light shaft — hero illumination */
-.hero::before{
-  content:'';
-  position:absolute;top:-100px;left:50%;transform:translateX(-50%);
-  width:3px;height:65%;
-  background:linear-gradient(to bottom, rgba(196,181,253,0) 0%, rgba(196,181,253,.3) 20%, rgba(226,185,90,.15) 65%, transparent 100%);
-  filter:blur(5px);pointer-events:none;z-index:0;
-  animation:lightShaft 6s ease-in-out infinite;
-}
-.hero::after{
-  content:'';
-  position:absolute;top:-40px;left:50%;transform:translateX(-50%);
-  width:380px;height:380px;border-radius:50%;
-  background:radial-gradient(circle, rgba(196,181,253,.2) 0%, rgba(139,92,246,.07) 50%, transparent 75%);
-  filter:blur(45px);pointer-events:none;z-index:0;
-  animation:lightShaft 6s ease-in-out infinite;
-}
-@keyframes lightShaft{0%,100%{opacity:.65;}50%{opacity:1;}}
-
-/* ══════════════════════════════════════
-   CTA
-══════════════════════════════════════ */
-.cta-w{
-  padding:100px 80px;text-align:center;
-  position:relative;overflow:hidden;z-index:10;
-}
+/* CTA */
+.cta-w{padding:100px 80px;text-align:center;position:relative;overflow:hidden;z-index:10;}
 .cta-rings{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:0;}
-.cr{
-  position:absolute;border-radius:50%;border:1px solid;
-  transform:translate(-50%,-50%);
-  animation:crP var(--cd,3.5s) ease-out infinite;
-}
+.cr{position:absolute;border-radius:50%;border:1px solid;transform:translate(-50%,-50%);animation:crP var(--cd,3.5s) ease-out infinite;}
 .cr1{width:280px;height:280px;border-color:rgba(139,92,246,.3);--cd:3.5s;}
 .cr2{width:480px;height:480px;border-color:rgba(139,92,246,.18);--cd:3.5s;animation-delay:.6s;}
 .cr3{width:680px;height:680px;border-color:rgba(139,92,246,.1);--cd:3.5s;animation-delay:1.2s;}
 .cr4{width:880px;height:880px;border-color:rgba(139,92,246,.05);--cd:3.5s;animation-delay:1.8s;}
-@keyframes crP{
-  0%{transform:translate(-50%,-50%) scale(.7);opacity:0;}
-  40%{opacity:1;}
-  100%{transform:translate(-50%,-50%) scale(1.15);opacity:0;}
-}
+@keyframes crP{0%{transform:translate(-50%,-50%) scale(.7);opacity:0;}40%{opacity:1;}100%{transform:translate(-50%,-50%) scale(1.15);opacity:0;}}
 .cta-in{position:relative;z-index:1;max-width:720px;margin:0 auto;}
-
-/* CTA brand lockup */
-.cta-brand-lock{
-  display:flex;flex-direction:column;align-items:center;gap:4px;margin-bottom:36px;
-}
-.cta-sun-sm{
-  width:40px;height:40px;
-  filter:drop-shadow(0 0 14px rgba(212,168,67,.7));
-  animation:sunRotate 15s linear infinite;
-}
-.cta-brand-name{
-  font-family:'Cormorant Upright',serif;font-size:26px;
-  background:linear-gradient(135deg,var(--p3),var(--rose),var(--gold));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-
-.cta-h{
-  font-family:'Cormorant Upright',serif;
-  font-size:clamp(28px,5.5vw,66px);font-weight:400;line-height:1.1;margin-bottom:22px;
-}
-.cta-h em{
-  display:block;font-style:italic;
-  font-family:'EB Garamond',serif;
-  background:linear-gradient(135deg,var(--p3),var(--rose),var(--gold));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  font-size:1.15em;
-}
+.cta-brand-lock{display:flex;flex-direction:column;align-items:center;gap:4px;margin-bottom:36px;}
+.cta-sun-sm{width:40px;height:40px;filter:drop-shadow(0 0 14px rgba(212,168,67,.7));animation:sunRotate 15s linear infinite;}
+.cta-brand-name{font-family:'Cormorant Upright',serif;font-size:26px;background:linear-gradient(135deg,var(--p3),var(--rose),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.cta-h{font-family:'Cormorant Upright',serif;font-size:clamp(28px,5.5vw,66px);font-weight:400;line-height:1.1;margin-bottom:22px;}
+.cta-h em{display:block;font-style:italic;font-family:'EB Garamond',serif;background:linear-gradient(135deg,var(--p3),var(--rose),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-size:1.15em;}
 .cta-sub{font-size:16px;line-height:1.85;color:var(--muted);margin-bottom:52px;}
 .cta-form{display:flex;max-width:460px;margin:0 auto;}
-.cta-inp{
-  flex:1;background:rgba(255,255,255,.04);
-  border:1px solid rgba(91,33,182,.22);border-right:none;
-  padding:15px 22px;color:var(--cream);
-  font-family:'Jost',sans-serif;font-size:14px;outline:none;
-  transition:border-color .3s,background .3s;
-}
+.cta-inp{flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(91,33,182,.22);border-right:none;padding:15px 22px;color:var(--cream);font-family:'Jost',sans-serif;font-size:14px;outline:none;transition:border-color .3s,background .3s;}
 .cta-inp:focus{border-color:var(--p2);background:rgba(91,33,182,.05);}
 .cta-inp::placeholder{color:var(--muted);}
-.cta-btn{
-  font-family:'Cinzel',serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;
-  background:linear-gradient(135deg,var(--p1),var(--p2));
-  color:white;border:none;padding:15px 28px;cursor:none;transition:all .35s;white-space:nowrap;
-  box-shadow:0 0 28px rgba(91,33,182,.35);
-}
+.cta-btn{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;background:linear-gradient(135deg,var(--p1),var(--p2));color:white;border:none;padding:15px 28px;cursor:none;transition:all .35s;white-space:nowrap;box-shadow:0 0 28px rgba(91,33,182,.35);}
 .cta-btn:hover{background:linear-gradient(135deg,var(--p2),var(--rose));box-shadow:0 0 50px rgba(124,58,237,.5);}
 .cta-note{font-size:12px;letter-spacing:.1em;color:var(--muted);margin-top:18px;}
 .cta-note a{color:var(--gold);text-decoration:none;transition:color .3s;}
 .cta-note a:hover{color:var(--gold2);}
 
-/* ══════════════════════════════════════
-   FOOTER
-══════════════════════════════════════ */
-footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--deep) 0%, #0e0b1f 100%);border-top:1px solid var(--line);}
+/* FOOTER */
+footer{position:relative;z-index:10;background:linear-gradient(180deg,var(--deep) 0%,#0e0b1f 100%);border-top:1px solid var(--line);}
 .ft-gbar{height:1px;background:linear-gradient(to right,transparent,var(--p2),var(--gold),var(--p2),transparent);opacity:.4;}
-.ft-g{
-  max-width:1200px;margin:0 auto;
-  display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:60px;
-  padding:60px 80px 48px;
-}
-.ft-brand .ftlogo{
-  display:flex;align-items:center;gap:10px;margin-bottom:18px;
-}
+.ft-g{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:60px;padding:60px 80px 48px;}
+.ft-brand .ftlogo{display:flex;align-items:center;gap:10px;margin-bottom:18px;}
 .ft-sun{width:26px;height:26px;filter:drop-shadow(0 0 6px rgba(212,168,67,.5));animation:sunRotate 20s linear infinite;}
-.ft-name{
-  font-family:'Cormorant Upright',serif;font-size:18px;
-  background:linear-gradient(135deg,var(--p3),var(--rose),var(--gold));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
+.ft-name{font-family:'Cormorant Upright',serif;font-size:18px;background:linear-gradient(135deg,var(--p3),var(--rose),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .ft-tag-sm{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);opacity:.6;margin-bottom:14px;display:block;}
 .ft-brand p{font-size:14px;line-height:1.85;color:var(--muted);max-width:260px;}
 .ft-syms{font-size:18px;margin-top:20px;letter-spacing:8px;opacity:.3;animation:gsGlow 4s ease-in-out infinite;}
 @keyframes gsGlow{0%,100%{opacity:.3;}50%{opacity:.5;}}
-.ft-col h5{
-  font-family:'Cinzel',serif;font-size:11px;letter-spacing:.3em;text-transform:uppercase;
-  color:var(--gold);margin-bottom:22px;padding-bottom:12px;border-bottom:1px solid var(--lng);
-}
+.ft-col h5{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:22px;padding-bottom:12px;border-bottom:1px solid var(--lng);}
 .ft-col ul{list-style:none;display:flex;flex-direction:column;gap:13px;}
-.ft-col ul li a{
-  font-size:14px;color:var(--muted);text-decoration:none;
-  display:inline-flex;align-items:center;
-  transition:color .3s,padding-left .3s;letter-spacing:.03em;
-}
-.ft-col ul li a::before{
-  content:'›';color:var(--p3);font-size:15px;
-  opacity:0;width:0;overflow:hidden;transition:all .3s;
-}
+.ft-col ul li a{font-size:14px;color:var(--muted);text-decoration:none;display:inline-flex;align-items:center;transition:color .3s,padding-left .3s;letter-spacing:.03em;}
+.ft-col ul li a::before{content:'›';color:var(--p3);font-size:15px;opacity:0;width:0;overflow:hidden;transition:all .3s;}
 .ft-col ul li a:hover{color:var(--cream);padding-left:10px;}
 .ft-col ul li a:hover::before{opacity:1;width:12px;}
-.ft-btm{
-  border-top:1px solid var(--line);padding:22px 80px;
-  background:rgba(14,11,31,.6);
-  display:flex;justify-content:space-between;align-items:center;
-}
+.ft-btm{border-top:1px solid var(--line);padding:22px 80px;background:rgba(14,11,31,.6);display:flex;justify-content:space-between;align-items:center;}
 .ft-btm p{font-size:12px;letter-spacing:.1em;color:var(--muted);}
 .ft-btm .fts{color:var(--gold);opacity:.6;}
 
-/* ══════════════════════════════════════
-   RESPONSIVE
-══════════════════════════════════════ */
+/* RESPONSIVE */
+@media(max-width:1100px){
+  .svc-cats{grid-template-columns:1fr;}
+  .tst-g{grid-template-columns:1fr;}
+}
 @media(max-width:1024px){
   nav{padding:0 28px;}
   .nav-links{display:none;}
-  .about-w{padding:60px 28px;}
+  .about-w,.svc-w,.proc-w{padding:60px 28px;}
   .about-g{grid-template-columns:1fr;gap:40px;}
-  .svc-w,.proc-w{padding:60px 28px;}
-  .svc-g,.svc-g2{grid-template-columns:1fr;}
   .proc-steps{grid-template-columns:1fr 1fr;gap:36px;}
   .proc-steps::before{display:none;}
   .tst-w{padding:60px 28px;}
-  .tst-g{grid-template-columns:1fr;}
   .cta-w{padding:72px 28px;}
   .cta-form{flex-direction:column;}
   .cta-inp{border-right:1px solid rgba(91,33,182,.22);border-bottom:none;}
@@ -892,9 +450,7 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
 
 <!-- Cursor -->
 <div id="cur-sun">
-  <!-- Sun ray SVG cursor -->
   <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <!-- Rays -->
     <line x1="24" y1="2" x2="24" y2="10" stroke="#f0c86a" stroke-width="2.2" stroke-linecap="round"/>
     <line x1="24" y1="38" x2="24" y2="46" stroke="#f0c86a" stroke-width="2.2" stroke-linecap="round"/>
     <line x1="2" y1="24" x2="10" y2="24" stroke="#f0c86a" stroke-width="2.2" stroke-linecap="round"/>
@@ -903,30 +459,19 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
     <line x1="34.8" y1="34.8" x2="40.5" y2="40.5" stroke="#f0c86a" stroke-width="2" stroke-linecap="round"/>
     <line x1="40.5" y1="7.5" x2="34.8" y2="13.2" stroke="#f0c86a" stroke-width="2" stroke-linecap="round"/>
     <line x1="13.2" y1="34.8" x2="7.5" y2="40.5" stroke="#f0c86a" stroke-width="2" stroke-linecap="round"/>
-    <!-- Inner ring -->
     <circle cx="24" cy="24" r="7" stroke="#f0c86a" stroke-width="1.5" fill="rgba(240,200,106,0.12)"/>
-    <!-- Core dot -->
     <circle cx="24" cy="24" r="3.5" fill="#f0c86a"/>
   </svg>
 </div>
 <div id="cur-trail">☽</div>
 <canvas id="trailC"></canvas>
-
-<!-- Space canvas -->
 <canvas id="spaceC"></canvas>
-
-<!-- Nebulae -->
-<div class="nbl n1"></div>
-<div class="nbl n2"></div>
-<div class="nbl n3"></div>
-<div class="nbl n4"></div>
-<div class="nbl n5"></div>
+<div class="nbl n1"></div><div class="nbl n2"></div><div class="nbl n3"></div><div class="nbl n4"></div><div class="nbl n5"></div>
 <div class="grain"></div>
 
 <!-- NAV -->
 <nav id="mainNav">
   <div class="logo-group">
-    <!-- Nav sun SVG -->
     <svg class="logo-sun-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
       <line x1="24" y1="2" x2="24" y2="9" stroke="#d4a843" stroke-width="2" stroke-linecap="round"/>
       <line x1="24" y1="39" x2="24" y2="46" stroke="#d4a843" stroke-width="2" stroke-linecap="round"/>
@@ -955,364 +500,92 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
 
 <!-- HERO -->
 <section class="hero" id="home">
-
-  <!-- ═══ HERO SPIRAL — CLOCKWISE INFINITE ILLUSION ═══ -->
-  <svg id="heroSpiralSvg" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
-       style="position:absolute;top:0;left:0;pointer-events:none;z-index:1;overflow:visible;">
+  <svg id="heroSpiralSvg" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="position:absolute;top:0;left:0;pointer-events:none;z-index:1;overflow:visible;">
     <defs>
-      <!-- Soft glow: blur layered under source keeps stroke luminous but crisp -->
       <filter id="spGlow" x="-40%" y="-40%" width="180%" height="180%" color-interpolation-filters="sRGB">
         <feGaussianBlur in="SourceGraphic" stdDeviation="2.8" result="blur"/>
-        <feMerge>
-          <feMergeNode in="blur"/>
-          <feMergeNode in="SourceGraphic"/>
-        </feMerge>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
       </filter>
-      <!-- Center focal glow gradient -->
       <radialGradient id="spFocalGrad" cx="50%" cy="50%" r="50%">
-        <stop offset="0%"   stop-color="rgba(216,180,254,0.9)"/>
-        <stop offset="40%"  stop-color="rgba(167,139,250,0.35)"/>
+        <stop offset="0%" stop-color="rgba(216,180,254,0.9)"/>
+        <stop offset="40%" stop-color="rgba(167,139,250,0.35)"/>
         <stop offset="100%" stop-color="rgba(109,40,217,0)"/>
       </radialGradient>
-      <!-- Outer-edge radial fade mask so spiral fades at viewport edges -->
       <radialGradient id="spMaskGrad" cx="50%" cy="50%" r="50%">
         <stop offset="50%" stop-color="white" stop-opacity="1"/>
         <stop offset="100%" stop-color="white" stop-opacity="0"/>
       </radialGradient>
-      <mask id="spFadeMask">
-        <rect id="spMaskRect" fill="url(#spMaskGrad)"/>
-      </mask>
+      <mask id="spFadeMask"><rect id="spMaskRect" fill="url(#spMaskGrad)"/></mask>
     </defs>
-
-    <!-- 
-      ROTATION GROUP — the entire spiral rotates clockwise around cx,cy.
-      transform-origin is set inline via JS to the exact spiral center.
-      rotate(360deg) in SVG coordinate space (Y-down) = clockwise visually.
-    -->
-    <g id="heroSpiralRotGroup" mask="url(#spFadeMask)">
-      <path id="heroSpiralPath"/>
-    </g>
-
-    <!-- Focal center elements — fixed, not rotated -->
+    <g id="heroSpiralRotGroup" mask="url(#spFadeMask)"><path id="heroSpiralPath"/></g>
     <circle id="heroSpiralGlow" r="22" fill="url(#spFocalGrad)" filter="url(#spGlow)" opacity="0"/>
-    <circle id="heroSpiralCore" r="3"  fill="rgba(230,210,255,0.95)" filter="url(#spGlow)" opacity="0"/>
+    <circle id="heroSpiralCore" r="3" fill="rgba(230,210,255,0.95)" filter="url(#spGlow)" opacity="0"/>
   </svg>
-
   <script>
   (function(){
-    /*
-    ╔══════════════════════════════════════════════════════════╗
-    ║  INFINITE CLOCKWISE SPIRAL — DESIGN LOGIC               ║
-    ║                                                         ║
-    ║  KEY INSIGHT: The spiral is ALWAYS FULLY DRAWN.         ║
-    ║  No dashoffset animation after the initial reveal.      ║
-    ║  "Infinite" illusion = full spiral rotates CW slowly.   ║
-    ║                                                         ║
-    ║  As it rotates, the outer arm continuously sweeps in    ║
-    ║  from the left, the inner loops tighten toward center,  ║
-    ║  and the eye reads this as endless inward flow.         ║
-    ║                                                         ║
-    ║  Center focal glow pulses — creates the illusion that   ║
-    ║  the spiral is feeding into an infinite singularity.    ║
-    ╚══════════════════════════════════════════════════════════╝
-    */
-
-    var CFG = {
-      turns:      9,      // spiral loop count — 6 gives rich density
-      steps:      900,    // path point count — higher = silkier bezier
-      rFraction:  0.50,   // outer radius as % of hero width (60% → left arm off-screen)
-      rInner:     3,      // px: inner radius (tiny curl at center)
-      drawDur:    5.5,    // s: initial draw-in duration
-      rotDur:     35,     // s: one full CW rotation — slow = hypnotic
-      strokeW:    1.6,    // px: stroke width
-      strokeCol:  'rgba(196,181,253,0.62)',  // lavender, visible but not harsh
-    };
-
-    /*
-      CLOCKWISE SPIRAL GEOMETRY
-      ─────────────────────────
-      SVG Y-axis points DOWN (opposite to math convention).
-      Standard parametric: x = r·cos(θ), y = r·sin(θ) → CCW in SVG.
-
-      To get CLOCKWISE in SVG:  y = -r·sin(θ)  (flip Y component).
-
-      We iterate θ from thetaMax→0 (outer arm first, spirals inward).
-      angleOffset = Math.PI positions the outer arm pointing LEFT.
-      With CW geometry + PI offset → outer arm exits left, 
-      rotates clockwise as θ decreases inward.
-    */
-    function buildSpiral(cx, cy, rOuter, rInner) {
-      var total = CFG.turns * 2 * Math.PI;
-      var pts   = [];
-      for (var i = 0; i <= CFG.steps; i++) {
-        var t     = i / CFG.steps;
-        var theta = total * (1 - t);               // thetaMax → 0
-        var r     = rOuter + (rInner - rOuter) * t; // rOuter → rInner
-        var angle = theta + Math.PI;               // PI offset → left entry
-        pts.push([
-          cx + r * Math.cos(angle),
-          cy - r * Math.sin(angle)                 // negative sin → CW
-        ]);
-      }
-      return pts;
-    }
-
-    /* Catmull-Rom → cubic bezier for organic smooth curves */
-    function toPath(pts) {
-      var d = 'M ' + pts[0][0].toFixed(2) + ',' + pts[0][1].toFixed(2);
-      var k = 0.36; // tension
-      for (var i = 0; i < pts.length - 1; i++) {
-        var p0 = pts[Math.max(i-1, 0)];
-        var p1 = pts[i];
-        var p2 = pts[i+1];
-        var p3 = pts[Math.min(i+2, pts.length-1)];
-        d += ' C '
-          + (p1[0] + (p2[0]-p0[0])*k/3).toFixed(2) + ',' + (p1[1] + (p2[1]-p0[1])*k/3).toFixed(2)
-          + ' '
-          + (p2[0] - (p3[0]-p1[0])*k/3).toFixed(2) + ',' + (p2[1] - (p3[1]-p1[1])*k/3).toFixed(2)
-          + ' '
-          + p2[0].toFixed(2) + ',' + p2[1].toFixed(2);
-      }
-      return d;
-    }
-
-    function injectStyle(id, css) {
-      var old = document.getElementById(id);
-      if (old) old.remove();
-      var s = document.createElement('style');
-      s.id  = id;
-      s.textContent = css;
-      document.head.appendChild(s);
-    }
-
-    function init() {
-      var hero     = document.getElementById('home');
-      var svg      = document.getElementById('heroSpiralSvg');
-      var rotGroup = document.getElementById('heroSpiralRotGroup');
-      var path     = document.getElementById('heroSpiralPath');
-      var glow     = document.getElementById('heroSpiralGlow');
-      var core     = document.getElementById('heroSpiralCore');
-      var maskRect = document.getElementById('spMaskRect');
-      if (!hero || !svg || !path) return;
-
-      /* ① Measure hero live dimensions */
-      var rect = hero.getBoundingClientRect();
-      var W = rect.width;
-      var H = rect.height;
-
-      /* ② Size SVG to exactly cover hero */
-      svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
-      svg.style.width  = W + 'px';
-      svg.style.height = H + 'px';
-
-      /* ③ Spiral center = exact pixel center of hero */
-      var cx = W * 0.50;
-      var cy = H * 0.50;
-
-      /* ④ Radii — outer arm bleeds off left edge */
-      var rOuter = W * CFG.rFraction;
-      var rInner = CFG.rInner;
-
-      /* ⑤ Build path */
-      var pts = buildSpiral(cx, cy, rOuter, rInner);
-      var d   = toPath(pts);
-      path.setAttribute('d', d);
-
-      /* ⑥ Style path */
-      path.style.fill           = 'none';
-      path.style.stroke         = CFG.strokeCol;
-      path.style.strokeWidth    = CFG.strokeW + 'px';
-      path.style.strokeLinecap  = 'round';
-      path.style.strokeLinejoin = 'round';
-      path.style.filter         = 'url(#spGlow)';
-
-      /* ⑦ Size fade mask */
-      maskRect.setAttribute('x',      0);
-      maskRect.setAttribute('y',      0);
-      maskRect.setAttribute('width',  W);
-      maskRect.setAttribute('height', H);
-
-      /* ⑧ Position focal elements at center */
-      glow.setAttribute('cx', cx.toFixed(2));
-      glow.setAttribute('cy', cy.toFixed(2));
-      core.setAttribute('cx', cx.toFixed(2));
-      core.setAttribute('cy', cy.toFixed(2));
-
-      /* ⑨ Measure true path length */
-      var pathLen = Math.round(path.getTotalLength());
-
-      /* ══════════════════════════════════════════════════
-         ANIMATION STRATEGY
-
-         Phase 1 — DRAW IN (one-shot, 5.5s):
-           dasharray = pathLen, dashoffset animates pathLen→0
-           The spiral strokes itself on from outer to inner.
-
-         Phase 2 — INFINITE ROTATION (forever):
-           Remove all dashoffset animation. Reset dashoffset=0.
-           The spiral is NOW ALWAYS FULLY VISIBLE.
-           Only the rotation group spins CW continuously.
-           
-           This is the key fix: NO dashoffset marching after
-           draw-in. That was causing the "vanishing" — the 
-           stroke was being consumed by the offset animation.
-           
-           Pure rotation = the whole spiral turns. The outer
-           arm continuously sweeps from left → the brain reads
-           this as an endless inward flow. True infinite illusion.
-
-         CLOCKWISE confirmation:
-           - Geometry: y = cy - r*sin(angle) [CW in SVG Y-down]
-           - Rotation: rotate(0→360deg) on the group
-           In SVG, positive rotation = clockwise. ✓
-      ══════════════════════════════════════════════════*/
-
-      /* ── PHASE 1: Draw-in ── */
-      path.style.animation   = 'none';
-      path.style.transition  = 'none';
-      rotGroup.style.animation = 'none';
-      rotGroup.style.transformOrigin = cx + 'px ' + cy + 'px';
-
-      // Hide spiral initially
-      path.style.strokeDasharray  = pathLen;
-      path.style.strokeDashoffset = pathLen;
-      path.getBoundingClientRect(); // force reflow
-
-      // Begin draw-in transition
-      path.style.transition = 'stroke-dashoffset ' + CFG.drawDur + 's cubic-bezier(0.22,1,0.36,1)';
-      path.style.strokeDashoffset = 0;
-
-      // Fade in focal glow partway through draw
+    var CFG={turns:9,steps:900,rFraction:.50,rInner:3,drawDur:5.5,rotDur:35,strokeW:1.6,strokeCol:'rgba(196,181,253,0.62)'};
+    function buildSpiral(cx,cy,rOuter,rInner){var total=CFG.turns*2*Math.PI,pts=[];for(var i=0;i<=CFG.steps;i++){var t=i/CFG.steps,theta=total*(1-t),r=rOuter+(rInner-rOuter)*t,angle=theta+Math.PI;pts.push([cx+r*Math.cos(angle),cy-r*Math.sin(angle)]);}return pts;}
+    function toPath(pts){var d='M '+pts[0][0].toFixed(2)+','+pts[0][1].toFixed(2),k=.36;for(var i=0;i<pts.length-1;i++){var p0=pts[Math.max(i-1,0)],p1=pts[i],p2=pts[i+1],p3=pts[Math.min(i+2,pts.length-1)];d+=' C '+(p1[0]+(p2[0]-p0[0])*k/3).toFixed(2)+','+(p1[1]+(p2[1]-p0[1])*k/3).toFixed(2)+' '+(p2[0]-(p3[0]-p1[0])*k/3).toFixed(2)+','+(p2[1]-(p3[1]-p1[1])*k/3).toFixed(2)+' '+p2[0].toFixed(2)+','+p2[1].toFixed(2);}return d;}
+    function injectStyle(id,css){var old=document.getElementById(id);if(old)old.remove();var s=document.createElement('style');s.id=id;s.textContent=css;document.head.appendChild(s);}
+    function init(){
+      var hero=document.getElementById('home'),svg=document.getElementById('heroSpiralSvg'),rotGroup=document.getElementById('heroSpiralRotGroup'),path=document.getElementById('heroSpiralPath'),glow=document.getElementById('heroSpiralGlow'),core=document.getElementById('heroSpiralCore'),maskRect=document.getElementById('spMaskRect');
+      if(!hero||!svg||!path)return;
+      var rect=hero.getBoundingClientRect(),W=rect.width,H=rect.height;
+      svg.setAttribute('viewBox','0 0 '+W+' '+H);svg.style.width=W+'px';svg.style.height=H+'px';
+      var cx=W*.50,cy=H*.50,rOuter=W*CFG.rFraction,rInner=CFG.rInner;
+      var pts=buildSpiral(cx,cy,rOuter,rInner),d=toPath(pts);
+      path.setAttribute('d',d);
+      path.style.fill='none';path.style.stroke=CFG.strokeCol;path.style.strokeWidth=CFG.strokeW+'px';path.style.strokeLinecap='round';path.style.strokeLinejoin='round';path.style.filter='url(#spGlow)';
+      maskRect.setAttribute('x',0);maskRect.setAttribute('y',0);maskRect.setAttribute('width',W);maskRect.setAttribute('height',H);
+      glow.setAttribute('cx',cx.toFixed(2));glow.setAttribute('cy',cy.toFixed(2));
+      core.setAttribute('cx',cx.toFixed(2));core.setAttribute('cy',cy.toFixed(2));
+      var pathLen=Math.round(path.getTotalLength());
+      path.style.animation='none';path.style.transition='none';rotGroup.style.animation='none';rotGroup.style.transformOrigin=cx+'px '+cy+'px';
+      path.style.strokeDasharray=pathLen;path.style.strokeDashoffset=pathLen;path.getBoundingClientRect();
+      path.style.transition='stroke-dashoffset '+CFG.drawDur+'s cubic-bezier(0.22,1,0.36,1)';path.style.strokeDashoffset=0;
+      setTimeout(function(){glow.style.transition='opacity 2.5s ease';core.style.transition='opacity 1.8s ease';glow.style.opacity='1';core.style.opacity='1';},CFG.drawDur*600);
       setTimeout(function(){
-        glow.style.transition = 'opacity 2.5s ease';
-        core.style.transition = 'opacity 1.8s ease';
-        glow.style.opacity = '1';
-        core.style.opacity = '1';
-      }, CFG.drawDur * 600);
-
-      /* ── PHASE 2: Switch to infinite CW rotation ── */
-      setTimeout(function(){
-        // Kill dashoffset animation — spiral stays fully drawn
-        path.style.transition  = 'none';
-        path.style.animation   = 'none';
-        path.style.strokeDasharray  = 'none'; // fully visible, no dash
-        path.style.strokeDashoffset = '0';
-        path.getBoundingClientRect();
-
-        // Inject CW rotation keyframes (unique per init call)
-        var uid = 'spCW_' + Math.floor(cx) + '_' + Date.now();
-        injectStyle(uid,
-          '@keyframes ' + uid + '{' +
-            'from{transform:rotate(0deg);}' +
-            'to{transform:rotate(360deg);}' +   // positive = CW in SVG
-          '}'
-        );
-
-        // Pulse the focal glow to sell the "singularity" illusion
-        injectStyle('spFocalPulse',
-          '@keyframes spFocalPulse{' +
-            '0%,100%{r:22;opacity:0.85;}' +
-            '50%{r:38;opacity:0.25;}' +
-          '}'
-        );
-        injectStyle('spCorePulse',
-          '@keyframes spCorePulse{' +
-            '0%,100%{r:3;opacity:0.95;}' +
-            '35%{r:5;opacity:0.6;}' +
-            '70%{r:2.5;opacity:1;}' +
-          '}'
-        );
-
-        // Apply rotation to the group — pivot = spiral center
-        rotGroup.style.transformOrigin = cx + 'px ' + cy + 'px';
-        rotGroup.style.animation = uid + ' ' + CFG.rotDur + 's linear infinite';
-
-        // Apply pulsing to focal elements
-        glow.style.animation = 'spFocalPulse 6s ease-in-out infinite';
-        core.style.animation = 'spCorePulse 4s ease-in-out infinite';
-
-        // Optional: very subtle stroke opacity breathe
-        injectStyle('spBreathe',
-          '@keyframes spBreathe{' +
-            '0%,100%{stroke-opacity:0.62;}' +
-            '50%{stroke-opacity:0.35;}' +
-          '}'
-        );
-        path.style.animation = 'spBreathe 14s ease-in-out infinite';
-
-      }, (CFG.drawDur + 0.2) * 1000);
+        path.style.transition='none';path.style.animation='none';path.style.strokeDasharray='none';path.style.strokeDashoffset='0';path.getBoundingClientRect();
+        var uid='spCW_'+Math.floor(cx)+'_'+Date.now();
+        injectStyle(uid,'@keyframes '+uid+'{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}');
+        injectStyle('spFocalPulse','@keyframes spFocalPulse{0%,100%{r:22;opacity:0.85;}50%{r:38;opacity:0.25;}}');
+        injectStyle('spCorePulse','@keyframes spCorePulse{0%,100%{r:3;opacity:0.95;}35%{r:5;opacity:0.6;}70%{r:2.5;opacity:1;}}');
+        rotGroup.style.transformOrigin=cx+'px '+cy+'px';rotGroup.style.animation=uid+' '+CFG.rotDur+'s linear infinite';
+        glow.style.animation='spFocalPulse 6s ease-in-out infinite';core.style.animation='spCorePulse 4s ease-in-out infinite';
+        injectStyle('spBreathe','@keyframes spBreathe{0%,100%{stroke-opacity:0.62;}50%{stroke-opacity:0.35;}}');
+        path.style.animation='spBreathe 14s ease-in-out infinite';
+      },(CFG.drawDur+0.2)*1000);
     }
-
-    /* Boot */
-    if (document.readyState === 'complete') { init(); }
-    else { window.addEventListener('load', init); }
-
-    /* Responsive: rebuild on resize */
-    var resizeT;
-    window.addEventListener('resize', function(){
-      clearTimeout(resizeT);
-      resizeT = setTimeout(function(){
-        var rg = document.getElementById('heroSpiralRotGroup');
-        var p  = document.getElementById('heroSpiralPath');
-        var g  = document.getElementById('heroSpiralGlow');
-        var c  = document.getElementById('heroSpiralCore');
-        if(rg){ rg.style.animation='none'; rg.style.transform='none'; }
-        if(p) { p.style.animation='none'; p.style.transition='none'; }
-        if(g) { g.style.opacity='0'; g.style.transition='none'; g.style.animation='none'; }
-        if(c) { c.style.opacity='0'; c.style.transition='none'; c.style.animation='none'; }
-        init();
-      }, 250);
-    });
-
+    if(document.readyState==='complete'){init();}else{window.addEventListener('load',init);}
+    var resizeT;window.addEventListener('resize',function(){clearTimeout(resizeT);resizeT=setTimeout(function(){var rg=document.getElementById('heroSpiralRotGroup'),p=document.getElementById('heroSpiralPath'),g=document.getElementById('heroSpiralGlow'),c=document.getElementById('heroSpiralCore');if(rg){rg.style.animation='none';rg.style.transform='none';}if(p){p.style.animation='none';p.style.transition='none';}if(g){g.style.opacity='0';g.style.transition='none';g.style.animation='none';}if(c){c.style.opacity='0';c.style.transition='none';c.style.animation='none';}init();},250);});
   })();
   </script>
-  <!-- ═══ END HERO SPIRAL ═══ -->
   <div class="hero-emblem">
-    <!-- Wreath SVG behind hero -->
     <svg class="emblem-wreath" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" style="width:min(580px,88vw);height:min(580px,88vw);">
       <g fill="none" stroke="rgba(212,168,67,1)" stroke-width="1.2">
-        <!-- Outer wreath circle suggestion -->
         <circle cx="250" cy="250" r="230" stroke-dasharray="6 12" opacity=".6"/>
         <circle cx="250" cy="250" r="200" stroke-dasharray="2 18" opacity=".35"/>
-        <!-- Inner sun ring -->
         <circle cx="250" cy="250" r="80" opacity=".4"/>
-        <!-- 12 zodiac tick marks -->
         <g opacity=".5">
-          <line x1="250" y1="20" x2="250" y2="40"/>
-          <line x1="250" y1="20" x2="250" y2="40" transform="rotate(30,250,250)"/>
-          <line x1="250" y1="20" x2="250" y2="40" transform="rotate(60,250,250)"/>
-          <line x1="250" y1="20" x2="250" y2="40" transform="rotate(90,250,250)"/>
-          <line x1="250" y1="20" x2="250" y2="40" transform="rotate(120,250,250)"/>
-          <line x1="250" y1="20" x2="250" y2="40" transform="rotate(150,250,250)"/>
-          <line x1="250" y1="20" x2="250" y2="40" transform="rotate(180,250,250)"/>
-          <line x1="250" y1="20" x2="250" y2="40" transform="rotate(210,250,250)"/>
-          <line x1="250" y1="20" x2="250" y2="40" transform="rotate(240,250,250)"/>
-          <line x1="250" y1="20" x2="250" y2="40" transform="rotate(270,250,250)"/>
-          <line x1="250" y1="20" x2="250" y2="40" transform="rotate(300,250,250)"/>
-          <line x1="250" y1="20" x2="250" y2="40" transform="rotate(330,250,250)"/>
+          <line x1="250" y1="20" x2="250" y2="40"/><line x1="250" y1="20" x2="250" y2="40" transform="rotate(30,250,250)"/>
+          <line x1="250" y1="20" x2="250" y2="40" transform="rotate(60,250,250)"/><line x1="250" y1="20" x2="250" y2="40" transform="rotate(90,250,250)"/>
+          <line x1="250" y1="20" x2="250" y2="40" transform="rotate(120,250,250)"/><line x1="250" y1="20" x2="250" y2="40" transform="rotate(150,250,250)"/>
+          <line x1="250" y1="20" x2="250" y2="40" transform="rotate(180,250,250)"/><line x1="250" y1="20" x2="250" y2="40" transform="rotate(210,250,250)"/>
+          <line x1="250" y1="20" x2="250" y2="40" transform="rotate(240,250,250)"/><line x1="250" y1="20" x2="250" y2="40" transform="rotate(270,250,250)"/>
+          <line x1="250" y1="20" x2="250" y2="40" transform="rotate(300,250,250)"/><line x1="250" y1="20" x2="250" y2="40" transform="rotate(330,250,250)"/>
         </g>
       </g>
-      <!-- Zodiac symbols -->
       <g font-family="serif" font-size="16" fill="rgba(212,168,67,0.7)" text-anchor="middle" dominant-baseline="middle">
-        <text transform="rotate(0,250,250) translate(250,45)">♈</text>
-        <text transform="rotate(30,250,250) translate(250,45)">♉</text>
-        <text transform="rotate(60,250,250) translate(250,45)">♊</text>
-        <text transform="rotate(90,250,250) translate(250,45)">♋</text>
-        <text transform="rotate(120,250,250) translate(250,45)">♌</text>
-        <text transform="rotate(150,250,250) translate(250,45)">♍</text>
-        <text transform="rotate(180,250,250) translate(250,45)">♎</text>
-        <text transform="rotate(210,250,250) translate(250,45)">♏</text>
-        <text transform="rotate(240,250,250) translate(250,45)">♐</text>
-        <text transform="rotate(270,250,250) translate(250,45)">♑</text>
-        <text transform="rotate(300,250,250) translate(250,45)">♒</text>
-        <text transform="rotate(330,250,250) translate(250,45)">♓</text>
+        <text transform="rotate(0,250,250) translate(250,45)">♈</text><text transform="rotate(30,250,250) translate(250,45)">♉</text>
+        <text transform="rotate(60,250,250) translate(250,45)">♊</text><text transform="rotate(90,250,250) translate(250,45)">♋</text>
+        <text transform="rotate(120,250,250) translate(250,45)">♌</text><text transform="rotate(150,250,250) translate(250,45)">♍</text>
+        <text transform="rotate(180,250,250) translate(250,45)">♎</text><text transform="rotate(210,250,250) translate(250,45)">♏</text>
+        <text transform="rotate(240,250,250) translate(250,45)">♐</text><text transform="rotate(270,250,250) translate(250,45)">♑</text>
+        <text transform="rotate(300,250,250) translate(250,45)">♒</text><text transform="rotate(330,250,250) translate(250,45)">♓</text>
       </g>
     </svg>
-    <div class="emblem-ring1"></div>
-    <div class="emblem-ring2"></div>
+    <div class="emblem-ring1"></div><div class="emblem-ring2"></div>
   </div>
-
-  <!-- Floating planetary symbols -->
   <div class="fp" style="--fa:0deg;--fr:195px;--fd:20s;--fs:13px;">♄</div>
   <div class="fp" style="--fa:45deg;--fr:210px;--fd:26s;--fs:11px;">☽</div>
   <div class="fp" style="--fa:90deg;--fr:185px;--fd:16s;--fs:15px;">✦</div>
@@ -1321,31 +594,20 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
   <div class="fp" style="--fa:225deg;--fr:200px;--fd:24s;--fs:11px;">♀</div>
   <div class="fp" style="--fa:270deg;--fr:188px;--fd:19s;--fs:13px;">♂</div>
   <div class="fp" style="--fa:315deg;--fr:200px;--fd:21s;--fs:12px;">☉</div>
-
   <div class="hero-content">
     <h1 class="hero-h" style="margin-top:0;">Where Ancient Stars<br>Illuminate Your Sacred Path</h1>
     <p class="hero-sub">Vedic astrology, sacred healing arts, and transformative learning — the cosmos holds a language spoken uniquely for your soul.</p>
-
     <div class="hero-btns">
       <a href="#services" class="hbp"><span>Explore Sacred Arts</span></a>
       <a href="#consult" class="hbs">Book a Session</a>
     </div>
-
-    <div class="moon-strip">
-      <span>🌑</span><span>🌒</span><span>🌕</span><span>🌘</span><span>🌑</span>
-    </div>
+    <div class="moon-strip"><span>🌑</span><span>🌒</span><span>🌕</span><span>🌘</span><span>🌑</span></div>
   </div>
-
-  <div class="scroll-b">
-    <span>Descend</span>
-    <div class="scroll-p"></div>
-  </div>
+  <div class="scroll-b"><span>Descend</span><div class="scroll-p"></div></div>
 </section>
 
 <!-- MARQUEE -->
-<div class="mq-wrap">
-  <div class="mq-track" id="mqT"></div>
-</div>
+<div class="mq-wrap"><div class="mq-track" id="mqT"></div></div>
 
 <!-- DIVIDER -->
 <div class="s-div sw rev">
@@ -1370,84 +632,180 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
 </div>
 
 <!-- ABOUT -->
-<div class="sw">
-  <div class="about-w" id="about">
-    <div class="about-g">
-      <div class="brand-sphere rev">
-        <div class="bs-orb bo1"><div class="bp-dot bd1"></div></div>
-        <div class="bs-orb bo2"><div class="bp-dot bd2"></div></div>
-        <div class="bs-wreath">
-          <svg viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
-            <circle cx="160" cy="160" r="145" stroke="rgba(212,168,67,0.55)" stroke-width="1" stroke-dasharray="5 10"/>
-            <circle cx="160" cy="160" r="130" stroke="rgba(212,168,67,0.25)" stroke-width="0.7" stroke-dasharray="2 14"/>
-            <!-- Leaf cluster hints -->
-            <g fill="rgba(212,168,67,0.4)" opacity=".7">
-              <ellipse cx="160" cy="16" rx="4" ry="7" transform="rotate(0,160,160)"/>
-              <ellipse cx="160" cy="16" rx="4" ry="7" transform="rotate(30,160,160)"/>
-              <ellipse cx="160" cy="16" rx="4" ry="7" transform="rotate(60,160,160)"/>
-              <ellipse cx="160" cy="16" rx="4" ry="7" transform="rotate(90,160,160)"/>
-              <ellipse cx="160" cy="16" rx="4" ry="7" transform="rotate(120,160,160)"/>
-              <ellipse cx="160" cy="16" rx="4" ry="7" transform="rotate(150,160,160)"/>
-              <ellipse cx="160" cy="16" rx="4" ry="7" transform="rotate(180,160,160)"/>
-              <ellipse cx="160" cy="16" rx="4" ry="7" transform="rotate(210,160,160)"/>
-              <ellipse cx="160" cy="16" rx="4" ry="7" transform="rotate(240,160,160)"/>
-              <ellipse cx="160" cy="16" rx="4" ry="7" transform="rotate(270,160,160)"/>
-              <ellipse cx="160" cy="16" rx="4" ry="7" transform="rotate(300,160,160)"/>
-              <ellipse cx="160" cy="16" rx="4" ry="7" transform="rotate(330,160,160)"/>
-            </g>
-          </svg>
-        </div>
-        <div class="bs-inner">
-          <svg class="bs-sun" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <line x1="32" y1="2" x2="32" y2="13" stroke="#f0c86a" stroke-width="2.5" stroke-linecap="round"/>
-            <line x1="32" y1="51" x2="32" y2="62" stroke="#f0c86a" stroke-width="2.5" stroke-linecap="round"/>
-            <line x1="2" y1="32" x2="13" y2="32" stroke="#f0c86a" stroke-width="2.5" stroke-linecap="round"/>
-            <line x1="51" y1="32" x2="62" y2="32" stroke="#f0c86a" stroke-width="2.5" stroke-linecap="round"/>
-            <line x1="10" y1="10" x2="17.5" y2="17.5" stroke="#f0c86a" stroke-width="2" stroke-linecap="round"/>
-            <line x1="46.5" y1="46.5" x2="54" y2="54" stroke="#f0c86a" stroke-width="2" stroke-linecap="round"/>
-            <line x1="54" y1="10" x2="46.5" y2="17.5" stroke="#f0c86a" stroke-width="2" stroke-linecap="round"/>
-            <line x1="17.5" y1="46.5" x2="10" y2="54" stroke="#f0c86a" stroke-width="2" stroke-linecap="round"/>
-            <circle cx="32" cy="32" r="10" stroke="#f0c86a" stroke-width="1.8" fill="rgba(240,200,106,0.15)"/>
-            <circle cx="32" cy="32" r="5" fill="#f0c86a"/>
-          </svg>
-        </div>
+<div class="sw"><div class="about-w" id="about">
+  <div class="about-g">
+    <div class="brand-sphere rev">
+      <div class="bs-orb bo1"><div class="bp-dot bd1"></div></div>
+      <div class="bs-orb bo2"><div class="bp-dot bd2"></div></div>
+      <div class="bs-wreath">
+        <svg viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+          <circle cx="160" cy="160" r="145" stroke="rgba(212,168,67,0.55)" stroke-width="1" stroke-dasharray="5 10"/>
+          <circle cx="160" cy="160" r="130" stroke="rgba(212,168,67,0.25)" stroke-width="0.7" stroke-dasharray="2 14"/>
+          <g fill="rgba(212,168,67,0.4)" opacity=".7">
+            <ellipse cx="160" cy="16" rx="4" ry="7" transform="rotate(0,160,160)"/><ellipse cx="160" cy="16" rx="4" ry="7" transform="rotate(30,160,160)"/>
+            <ellipse cx="160" cy="16" rx="4" ry="7" transform="rotate(60,160,160)"/><ellipse cx="160" cy="16" rx="4" ry="7" transform="rotate(90,160,160)"/>
+            <ellipse cx="160" cy="16" rx="4" ry="7" transform="rotate(120,160,160)"/><ellipse cx="160" cy="16" rx="4" ry="7" transform="rotate(150,160,160)"/>
+            <ellipse cx="160" cy="16" rx="4" ry="7" transform="rotate(180,160,160)"/><ellipse cx="160" cy="16" rx="4" ry="7" transform="rotate(210,160,160)"/>
+            <ellipse cx="160" cy="16" rx="4" ry="7" transform="rotate(240,160,160)"/><ellipse cx="160" cy="16" rx="4" ry="7" transform="rotate(270,160,160)"/>
+            <ellipse cx="160" cy="16" rx="4" ry="7" transform="rotate(300,160,160)"/><ellipse cx="160" cy="16" rx="4" ry="7" transform="rotate(330,160,160)"/>
+          </g>
+        </svg>
       </div>
-
-      <div>
-        <span class="sl rev">The Practice</span>
-        <h2 class="sh rev">A Lineage of<br><em>Sacred Knowledge</em></h2>
-        <p class="about-desc rev" style="transition-delay:.2s">
-          Rooted in the ancient Vedic tradition, Spirilumen bridges <em>timeless astronomical wisdom</em> with the lived texture of modern life. Every reading, every healing, every teaching is a sacred dialogue between the cosmos and your deepest truth.
-        </p>
-        <p class="about-desc rev" style="transition-delay:.3s;margin-top:16px;">
-          Whether you seek clarity in relationships, career, purpose, or spiritual growth — the stars hold <em>a map written for you alone</em>. We illuminate the path so you can walk it with grace.
-        </p>
-        <div class="stats-row rev" style="transition-delay:.4s">
-          <div class="stat"><span class="stat-n">12+</span><span class="stat-l">Years of Practice</span></div>
-          <div class="stat"><span class="stat-n">2K+</span><span class="stat-l">Souls Guided</span></div>
-          <div class="stat"><span class="stat-n">5</span><span class="stat-l">Sacred Arts</span></div>
-          <div class="stat"><span class="stat-n">∞</span><span class="stat-l">Cosmic Wisdom</span></div>
-        </div>
+      <div class="bs-inner">
+        <svg class="bs-sun" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="32" y1="2" x2="32" y2="13" stroke="#f0c86a" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="32" y1="51" x2="32" y2="62" stroke="#f0c86a" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="2" y1="32" x2="13" y2="32" stroke="#f0c86a" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="51" y1="32" x2="62" y2="32" stroke="#f0c86a" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="10" y1="10" x2="17.5" y2="17.5" stroke="#f0c86a" stroke-width="2" stroke-linecap="round"/>
+          <line x1="46.5" y1="46.5" x2="54" y2="54" stroke="#f0c86a" stroke-width="2" stroke-linecap="round"/>
+          <line x1="54" y1="10" x2="46.5" y2="17.5" stroke="#f0c86a" stroke-width="2" stroke-linecap="round"/>
+          <line x1="17.5" y1="46.5" x2="10" y2="54" stroke="#f0c86a" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="32" cy="32" r="10" stroke="#f0c86a" stroke-width="1.8" fill="rgba(240,200,106,0.15)"/>
+          <circle cx="32" cy="32" r="5" fill="#f0c86a"/>
+        </svg>
+      </div>
+    </div>
+    <div>
+      <span class="sl rev">The Practice</span>
+      <h2 class="sh rev">A Lineage of<br><em>Sacred Knowledge</em></h2>
+      <p class="about-desc rev" style="transition-delay:.2s">Rooted in the ancient Vedic tradition, Spirilumen bridges <em>timeless astronomical wisdom</em> with the lived texture of modern life. Every reading, every healing, every teaching is a sacred dialogue between the cosmos and your deepest truth.</p>
+      <p class="about-desc rev" style="transition-delay:.3s;margin-top:16px;">Whether you seek clarity in relationships, career, purpose, or spiritual growth — the stars hold <em>a map written for you alone</em>. We illuminate the path so you can walk it with grace.</p>
+      <div class="stats-row rev" style="transition-delay:.4s">
+        <div class="stat"><span class="stat-n">12+</span><span class="stat-l">Years of Practice</span></div>
+        <div class="stat"><span class="stat-n">2K+</span><span class="stat-l">Souls Guided</span></div>
+        <div class="stat"><span class="stat-n">5</span><span class="stat-l">Sacred Arts</span></div>
+        <div class="stat"><span class="stat-n">∞</span><span class="stat-l">Cosmic Wisdom</span></div>
       </div>
     </div>
   </div>
-</div>
+</div></div>
 
-<!-- SERVICES -->
+<!-- ════════════════════════════════════════
+     SERVICES — 3 CATEGORIES WITH SUBCARDS
+════════════════════════════════════════ -->
 <div class="sw" id="services">
   <div class="svc-w">
     <div class="svc-hdr">
       <span class="sl rev">What We Offer</span>
       <h2 class="sh rev">Sacred Arts of <em>Spirilumen</em></h2>
     </div>
-    <div class="svc-g">
-      <div class="svc-c rev" id="sc1"><span class="svc-ic">♄</span><span class="svc-nm">01 · Astrology</span><h3 class="svc-name">Vedic Astrology</h3><p class="svc-desc">The mother science of the Vedas — a precise celestial map of your soul's journey, karmic patterns, and life purpose encoded at your birth.</p><div class="svc-tags"><span class="svc-tag">Birth Chart</span><span class="svc-tag">Dasha Reading</span><span class="svc-tag">Compatibility</span><span class="svc-tag">Career Guidance</span></div><a href="#consult" class="svc-lnk">Begin Reading →</a></div>
-      <div class="svc-c rev d1" id="sc2"><span class="svc-ic">✧</span><span class="svc-nm">02 · Healing</span><h3 class="svc-name">Healing Arts</h3><p class="svc-desc">Ancient energy practices to restore harmony across body, mind, and spirit — Reiki and meditation that awaken your innate capacity to heal.</p><div class="svc-tags"><span class="svc-tag">Guided Meditation</span><span class="svc-tag">Reiki Healing</span><span class="svc-tag">Chakra Balancing</span><span class="svc-tag">Distance Healing</span></div><a href="#consult" class="svc-lnk">Explore Healing →</a></div>
-      <div class="svc-c rev d2" id="sc3"><span class="svc-ic">☽</span><span class="svc-nm">03 · Tarot</span><h3 class="svc-name">Tarot Reading</h3><p class="svc-desc">The cards mirror the soul's inner knowing. Each spread illuminates energies at play and the deeper wisdom your higher self already holds.</p><div class="svc-tags"><span class="svc-tag">Celtic Cross</span><span class="svc-tag">Monthly Guidance</span><span class="svc-tag">Relationship Spread</span><span class="svc-tag">Clarity Reading</span></div><a href="#consult" class="svc-lnk">Reveal Cards →</a></div>
-    </div>
-    <div class="svc-g2">
-      <div class="svc-c rev" id="sc4"><span class="svc-ic">◈</span><span class="svc-nm">04 · Coaching</span><h3 class="svc-name">Life Coaching &amp; Law of Attraction</h3><p class="svc-desc">Consciousness-based coaching integrating Vedic principles with the universal laws of manifestation — helping you architect the life your soul is calling forward.</p><div class="svc-tags"><span class="svc-tag">1:1 Coaching</span><span class="svc-tag">Law of Attraction</span><span class="svc-tag">Manifestation Mapping</span><span class="svc-tag">Vision Clarity</span></div><a href="#consult" class="svc-lnk">Start Your Journey →</a></div>
-      <div class="svc-c rev d1" id="sc5"><span class="svc-ic">⟡</span><span class="svc-nm">05 · Learning</span><h3 class="svc-name">Sacred Learning</h3><p class="svc-desc">Immersive courses to awaken your intuitive gifts — from beginner foundations to advanced practitioner mastery in the ancient sacred arts.</p><div class="svc-tags"><span class="svc-tag">Tarot Certification</span><span class="svc-tag">Vedic Foundations</span><span class="svc-tag">Meditation Training</span><span class="svc-tag">Group Cohorts</span></div><a href="#consult" class="svc-lnk">Learn &amp; Awaken →</a></div>
+
+    <div class="svc-cats">
+
+      <!-- ── 01 Astrological Services ── -->
+      <div class="svc-cat rev">
+        <div class="cat-header">
+          <span class="cat-num">01 · Astrological Services</span>
+          <div class="cat-icon">♄</div>
+          <h3 class="cat-title">Reading the<br>Celestial Script</h3>
+        </div>
+        <div class="sub-cards">
+          <div class="sub-card">
+            <span class="sub-letter">A</span>
+            <h4 class="sub-name">Vedic Astrology</h4>
+            <p class="sub-desc">The mother science of the Vedas — a precise celestial map of your soul's journey, karmic patterns, and life purpose encoded at the moment of your birth.</p>
+            <div class="sub-tags">
+              <span class="sub-tag">Birth Chart</span><span class="sub-tag">Dasha Reading</span>
+              <span class="sub-tag">Compatibility</span><span class="sub-tag">Career Guidance</span>
+            </div>
+            <a href="#consult" class="sub-lnk">Begin Reading →</a>
+          </div>
+          <div class="sub-card">
+            <span class="sub-letter">B</span>
+            <h4 class="sub-name">Tarot Reading</h4>
+            <p class="sub-desc">The cards mirror the soul's inner knowing. Each spread illuminates the energies at play and the deeper wisdom your higher self already holds within.</p>
+            <div class="sub-tags">
+              <span class="sub-tag">Celtic Cross</span><span class="sub-tag">Monthly Guidance</span>
+              <span class="sub-tag">Relationship Spread</span><span class="sub-tag">Clarity Reading</span>
+            </div>
+            <a href="#consult" class="sub-lnk">Reveal Cards →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 02 Healing ── -->
+      <div class="svc-cat rev d1">
+        <div class="cat-header">
+          <span class="cat-num">02 · Healing</span>
+          <div class="cat-icon">✧</div>
+          <h3 class="cat-title">Restoring the<br>Sacred Balance</h3>
+        </div>
+        <div class="sub-cards">
+          <div class="sub-card">
+            <span class="sub-letter">A</span>
+            <h4 class="sub-name">Meditation</h4>
+            <p class="sub-desc">Guided practices that quiet the restless mind and open channels to stillness, clarity, and the boundless awareness that is your true nature.</p>
+            <div class="sub-tags">
+              <span class="sub-tag">Guided Sessions</span><span class="sub-tag">Breath Work</span>
+              <span class="sub-tag">Mantra Practice</span><span class="sub-tag">Mindfulness</span>
+            </div>
+            <a href="#consult" class="sub-lnk">Find Stillness →</a>
+          </div>
+          <div class="sub-card">
+            <span class="sub-letter">B</span>
+            <h4 class="sub-name">Reiki Healing</h4>
+            <p class="sub-desc">Ancient energy practices that restore harmony across body, mind, and spirit — awakening your innate capacity to heal and return to wholeness.</p>
+            <div class="sub-tags">
+              <span class="sub-tag">Energy Balancing</span><span class="sub-tag">Chakra Alignment</span>
+              <span class="sub-tag">Distance Healing</span><span class="sub-tag">Aura Cleansing</span>
+            </div>
+            <a href="#consult" class="sub-lnk">Begin Healing →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 03 Learning ── -->
+      <div class="svc-cat rev d2">
+        <div class="cat-header">
+          <span class="cat-num">03 · Learning</span>
+          <div class="cat-icon">⟡</div>
+          <h3 class="cat-title">Awakening Your<br>Inner Wisdom</h3>
+        </div>
+        <div class="sub-cards">
+          <div class="sub-card">
+            <span class="sub-letter">A</span>
+            <h4 class="sub-name">Law of Attraction</h4>
+            <p class="sub-desc">Consciousness-based mastery integrating Vedic principles with universal laws of manifestation — architecting the life your soul is calling forward.</p>
+            <div class="sub-tags">
+              <span class="sub-tag">Manifestation</span><span class="sub-tag">Vision Mapping</span>
+              <span class="sub-tag">Abundance Work</span>
+            </div>
+            <a href="#consult" class="sub-lnk">Start Manifesting →</a>
+          </div>
+          <div class="sub-card">
+            <span class="sub-letter">B</span>
+            <h4 class="sub-name">Meditation Training</h4>
+            <p class="sub-desc">Learn to guide others through the transformative landscape of meditation — from foundations to advanced practitioner certification.</p>
+            <div class="sub-tags">
+              <span class="sub-tag">Beginner to Advanced</span><span class="sub-tag">Certification</span>
+              <span class="sub-tag">Group Cohorts</span>
+            </div>
+            <a href="#consult" class="sub-lnk">Explore Course →</a>
+          </div>
+          <div class="sub-card">
+            <span class="sub-letter">C</span>
+            <h4 class="sub-name">Tarot Mastery</h4>
+            <p class="sub-desc">Immersive certification to awaken your intuitive gift with the cards — from symbolism and archetypes to reading for others with depth and confidence.</p>
+            <div class="sub-tags">
+              <span class="sub-tag">Tarot Certification</span><span class="sub-tag">Archetypes</span>
+              <span class="sub-tag">Live Practice</span>
+            </div>
+            <a href="#consult" class="sub-lnk">Become a Reader →</a>
+          </div>
+          <div class="sub-card">
+            <span class="sub-letter">D</span>
+            <h4 class="sub-name">Enlightened Happiness</h4>
+            <p class="sub-desc">A transformative journey weaving Vedic philosophy, positive psychology, and spiritual practice — discovering the unconditional joy at your core.</p>
+            <div class="sub-tags">
+              <span class="sub-tag">Vedic Philosophy</span><span class="sub-tag">Inner Work</span>
+              <span class="sub-tag">Joy Practices</span><span class="sub-tag">Soul Purpose</span>
+            </div>
+            <a href="#consult" class="sub-lnk">Discover Joy →</a>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -1455,25 +813,25 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
 <!-- DIVIDER -->
 <div class="s-div sw rev">
   <div class="s-div-l"></div>
-  <div class="s-div-c"><span class="mq-sun" style="font-family:serif;font-size:16px;">✦</span></div>
+  <div class="s-div-c"><span style="font-family:serif;font-size:16px;color:var(--gold);">✦</span></div>
   <div class="s-div-l"></div>
 </div>
 
 <!-- PROCESS -->
-<div class="sw">
-  <div class="proc-w" id="journey">
-    <span class="sl rev">Your Journey</span>
-    <h2 class="sh rev">How the <em>Light Finds You</em></h2>
-    <div class="proc-steps">
-      <div class="ps rev"><div class="ps-num">I</div><h3 class="ps-t">Reach Out</h3><p class="ps-d">Share your intention — what you seek, question, or feel called to understand. Every journey begins with a single word toward light.</p></div>
-      <div class="ps rev d1"><div class="ps-num">II</div><h3 class="ps-t">Free Discovery</h3><p class="ps-d">A complimentary 20-minute call to align your needs with the right sacred path — reading, healing, coaching, or learning.</p></div>
-      <div class="ps rev d2"><div class="ps-num">III</div><h3 class="ps-t">Sacred Session</h3><p class="ps-d">Your personalized session — conducted with care, precision, and sacred intention, whether in person or through the digital ether.</p></div>
-      <div class="ps rev d3"><div class="ps-num">IV</div><h3 class="ps-t">Integration</h3><p class="ps-d">Receive recorded insights, written materials, and continued support to anchor and embody what has been revealed to you.</p></div>
-    </div>
+<div class="sw"><div class="proc-w" id="journey">
+  <span class="sl rev">Your Journey</span>
+  <h2 class="sh rev">How the <em>Light Finds You</em></h2>
+  <div class="proc-steps">
+    <div class="ps rev"><div class="ps-num">I</div><h3 class="ps-t">Reach Out</h3><p class="ps-d">Share your intention — what you seek, question, or feel called to understand. Every journey begins with a single word toward light.</p></div>
+    <div class="ps rev d1"><div class="ps-num">II</div><h3 class="ps-t">Free Discovery</h3><p class="ps-d">A complimentary 20-minute call to align your needs with the right sacred path — reading, healing, coaching, or learning.</p></div>
+    <div class="ps rev d2"><div class="ps-num">III</div><h3 class="ps-t">Sacred Session</h3><p class="ps-d">Your personalized session — conducted with care, precision, and sacred intention, whether in person or through the digital ether.</p></div>
+    <div class="ps rev d3"><div class="ps-num">IV</div><h3 class="ps-t">Integration</h3><p class="ps-d">Receive recorded insights, written materials, and continued support to anchor and embody what has been revealed to you.</p></div>
   </div>
-</div>
+</div></div>
 
-<!-- TESTIMONIALS -->
+<!-- ════════════════════════════════════════
+     TESTIMONIALS — ROUNDED & PROFESSIONAL
+════════════════════════════════════════ -->
 <div class="sw tst-w" id="stories">
   <div class="tst-i">
     <div class="tst-hdr">
@@ -1481,9 +839,43 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
       <h2 class="sh rev">Stories of <em>Transformation</em></h2>
     </div>
     <div class="tst-g">
-      <div class="tc rev"><div class="tc-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><p class="tc-q">The Vedic reading left me speechless. It mapped patterns I had never been able to articulate — I finally understood why I kept making the same choices, and how to truly change them.</p><div class="tc-a"><div class="ta-av">P</div><div><div class="ta-n">Priya M.</div><div class="ta-r">Vedic Astrology Reading</div></div></div></div>
-      <div class="tc rev d1"><div class="tc-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><p class="tc-q">Three Reiki sessions and I felt like I had shed weight I had been carrying for years. The approach is deeply intuitive — it goes exactly where it needs to, without being told.</p><div class="tc-a"><div class="ta-av">S</div><div><div class="ta-n">Samantha L.</div><div class="ta-r">Reiki Healing</div></div></div></div>
-      <div class="tc rev d2"><div class="tc-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><p class="tc-q">The tarot certification completely changed how I see this practice. It is a language of the soul. I now read for others with real depth and confidence I did not know I had.</p><div class="tc-a"><div class="ta-av">A</div><div><div class="ta-n">Asha R.</div><div class="ta-r">Tarot Certification</div></div></div></div>
+
+      <div class="tc rev">
+        <div class="tc-quote-icon">"</div>
+        <div class="tc-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <p class="tc-q">The Vedic reading left me speechless. It mapped patterns I had never been able to articulate — I finally understood why I kept making the same choices, and how to truly change them.</p>
+        <div class="tc-sep"></div>
+        <div class="tc-a">
+          <div class="ta-av">P</div>
+          <div><div class="ta-n">Priya M.</div><div class="ta-r">Vedic Astrology Reading</div></div>
+        </div>
+        <div class="tc-bottom-line"></div>
+      </div>
+
+      <div class="tc rev d1">
+        <div class="tc-quote-icon">"</div>
+        <div class="tc-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <p class="tc-q">Three Reiki sessions and I felt like I had shed weight I had been carrying for years. The approach is deeply intuitive — it goes exactly where it needs to, without being told.</p>
+        <div class="tc-sep"></div>
+        <div class="tc-a">
+          <div class="ta-av">S</div>
+          <div><div class="ta-n">Samantha L.</div><div class="ta-r">Reiki Healing</div></div>
+        </div>
+        <div class="tc-bottom-line"></div>
+      </div>
+
+      <div class="tc rev d2">
+        <div class="tc-quote-icon">"</div>
+        <div class="tc-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <p class="tc-q">The tarot certification completely changed how I see this practice. It is a language of the soul. I now read for others with real depth and confidence I did not know I had.</p>
+        <div class="tc-sep"></div>
+        <div class="tc-a">
+          <div class="ta-av">A</div>
+          <div><div class="ta-n">Asha R.</div><div class="ta-r">Tarot Certification</div></div>
+        </div>
+        <div class="tc-bottom-line"></div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -1491,8 +883,7 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
 <!-- CTA -->
 <div class="sw cta-w" id="consult">
   <div class="cta-rings">
-    <div class="cr cr1"></div><div class="cr cr2"></div>
-    <div class="cr cr3"></div><div class="cr cr4"></div>
+    <div class="cr cr1"></div><div class="cr cr2"></div><div class="cr cr3"></div><div class="cr cr4"></div>
   </div>
   <div class="cta-in">
     <div class="cta-brand-lock rev">
@@ -1547,28 +938,22 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
     <div class="ft-col">
       <h5>Services</h5>
       <ul>
-        <li><a href="#">Vedic Astrology</a></li>
-        <li><a href="#">Tarot Reading</a></li>
-        <li><a href="#">Reiki Healing</a></li>
-        <li><a href="#">Meditation</a></li>
+        <li><a href="#">Vedic Astrology</a></li><li><a href="#">Tarot Reading</a></li>
+        <li><a href="#">Reiki Healing</a></li><li><a href="#">Meditation</a></li>
       </ul>
     </div>
     <div class="ft-col">
       <h5>Learn</h5>
       <ul>
-        <li><a href="#">Life Coaching</a></li>
-        <li><a href="#">Law of Attraction</a></li>
-        <li><a href="#">Tarot Certification</a></li>
-        <li><a href="#">Astrology Course</a></li>
+        <li><a href="#">Law of Attraction</a></li><li><a href="#">Meditation Training</a></li>
+        <li><a href="#">Tarot Certification</a></li><li><a href="#">Enlightened Happiness</a></li>
       </ul>
     </div>
     <div class="ft-col">
       <h5>Connect</h5>
       <ul>
-        <li><a href="#">Instagram</a></li>
-        <li><a href="#">YouTube</a></li>
-        <li><a href="#">WhatsApp</a></li>
-        <li><a href="#">Book a Call</a></li>
+        <li><a href="#">Instagram</a></li><li><a href="#">YouTube</a></li>
+        <li><a href="#">WhatsApp</a></li><li><a href="#">Book a Call</a></li>
       </ul>
     </div>
   </div>
@@ -1579,225 +964,90 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
 </footer>
 
 <script>
-/* ══ SPACE CANVAS ══ */
+/* SPACE CANVAS */
 (()=>{
-  const c=document.getElementById('spaceC');
-  const x=c.getContext('2d');
+  const c=document.getElementById('spaceC'),x=c.getContext('2d');
   let W=c.width=innerWidth,H=c.height=innerHeight;
   window.addEventListener('resize',()=>{W=c.width=innerWidth;H=c.height=innerHeight;init();});
-  const stars=[];const consts=[];
+  const stars=[],consts=[];
   function init(){
     stars.length=0;consts.length=0;
-    for(let i=0;i<340;i++){
-      const kind=Math.random();
-      stars.push({
-        px:Math.random()*W,py:Math.random()*H,
-        r:Math.random()*1.8+.25,
-        op:Math.random()*.8+.15,
-        sp:Math.random()*.014+.005,
-        ph:Math.random()*Math.PI*2,
-        gold:kind<.14,
-        violet:kind>=.14&&kind<.32
-      });
-    }
-    const pts=[];
-    for(let i=0;i<30;i++)pts.push({x:Math.random()*W,y:Math.random()*H});
-    for(let i=0;i<pts.length-1;i++){
-      if(Math.hypot(pts[i+1].x-pts[i].x,pts[i+1].y-pts[i].y)<180)consts.push([pts[i],pts[i+1]]);
-    }
+    for(let i=0;i<340;i++){const kind=Math.random();stars.push({px:Math.random()*W,py:Math.random()*H,r:Math.random()*1.8+.25,op:Math.random()*.8+.15,sp:Math.random()*.014+.005,ph:Math.random()*Math.PI*2,gold:kind<.14,violet:kind>=.14&&kind<.32});}
+    const pts=[];for(let i=0;i<30;i++)pts.push({x:Math.random()*W,y:Math.random()*H});
+    for(let i=0;i<pts.length-1;i++){if(Math.hypot(pts[i+1].x-pts[i].x,pts[i+1].y-pts[i].y)<180)consts.push([pts[i],pts[i+1]]);}
   }
-  init();
-  let t=0;
+  init();let t=0;
   function frame(){
     x.clearRect(0,0,W,H);t+=.007;
-    consts.forEach(([a,b])=>{
-      const op=(Math.sin(t*.25)+1)/2*.09+.04;
-      x.beginPath();x.moveTo(a.x,a.y);x.lineTo(b.x,b.y);
-      x.strokeStyle=`rgba(139,92,246,${op})`;x.lineWidth=.6;x.stroke();
-    });
+    consts.forEach(([a,b])=>{const op=(Math.sin(t*.25)+1)/2*.09+.04;x.beginPath();x.moveTo(a.x,a.y);x.lineTo(b.x,b.y);x.strokeStyle=`rgba(139,92,246,${op})`;x.lineWidth=.6;x.stroke();});
     stars.forEach(s=>{
-      const op=s.op*((.5+.5*Math.sin(t*s.sp*5+s.ph)));
+      const op=s.op*(.5+.5*Math.sin(t*s.sp*5+s.ph));
       x.beginPath();x.arc(s.px,s.py,s.r,0,Math.PI*2);
-      if(s.gold) x.fillStyle=`rgba(226,185,90,${op})`;
-      else if(s.violet) x.fillStyle=`rgba(196,181,253,${op})`;
-      else x.fillStyle=`rgba(255,255,255,${op*.85})`;
+      if(s.gold)x.fillStyle=`rgba(226,185,90,${op})`;else if(s.violet)x.fillStyle=`rgba(196,181,253,${op})`;else x.fillStyle=`rgba(255,255,255,${op*.85})`;
       x.fill();
-      if(s.r>1.1&&op>.4){
-        const col=s.gold?`rgba(226,185,90,${op*.4})`:s.violet?`rgba(196,181,253,${op*.4})`:`rgba(255,255,255,${op*.25})`;
-        x.strokeStyle=col;x.lineWidth=.5;
-        const fl=s.r*4;
-        x.beginPath();x.moveTo(s.px-fl,s.py);x.lineTo(s.px+fl,s.py);x.stroke();
-        x.beginPath();x.moveTo(s.px,s.py-fl);x.lineTo(s.px,s.py+fl);x.stroke();
-      }
-    });
-    requestAnimationFrame(frame);
-  }
-  frame();
+      if(s.r>1.1&&op>.4){const col=s.gold?`rgba(226,185,90,${op*.4})`:s.violet?`rgba(196,181,253,${op*.4})`:`rgba(255,255,255,${op*.25})`;x.strokeStyle=col;x.lineWidth=.5;const fl=s.r*4;x.beginPath();x.moveTo(s.px-fl,s.py);x.lineTo(s.px+fl,s.py);x.stroke();x.beginPath();x.moveTo(s.px,s.py-fl);x.lineTo(s.px,s.py+fl);x.stroke();}
+    });requestAnimationFrame(frame);
+  }frame();
 })();
 
-/* ══ CURSOR — Sun + Astro Trail ══ */
+/* CURSOR */
 (()=>{
-  const sun=document.getElementById('cur-sun');
-  const trailEl=document.getElementById('cur-trail');
-  const tc=document.getElementById('trailC');
-  const ctx=tc.getContext('2d');
+  const sun=document.getElementById('cur-sun'),trailEl=document.getElementById('cur-trail'),tc=document.getElementById('trailC'),ctx=tc.getContext('2d');
   let W=tc.width=innerWidth,H=tc.height=innerHeight;
   window.addEventListener('resize',()=>{W=tc.width=innerWidth;H=tc.height=innerHeight;});
-
-  let mx=0,my=0,lx=0,ly=0;
-  const trail=[];
-  // Astrology-relevant glyphs for particle trail
-  const ZODIAC=['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];
-  const PLANET=['☉','☽','☿','♀','♂','♃','♄'];
-  const SPARKS=['✦','✧','⋆','·','★'];
-
+  let mx=0,my=0,lx=0,ly=0;const trail=[];
+  const ZODIAC=['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'],PLANET=['☉','☽','☿','♀','♂','♃','♄'],SPARKS=['✦','✧','⋆','·','★'];
   document.addEventListener('mousemove',e=>{
-    mx=e.clientX;my=e.clientY;
-    const n=Math.floor(Math.random()*3)+1;
-    for(let i=0;i<n;i++){
-      const type=Math.random();
-      // 0-0.55: gold/purple sparks, 0.55-0.75: zodiac glyph, 0.75-1: planet glyph
-      let glyph=null;
-      if(type>0.75) glyph=PLANET[Math.floor(Math.random()*PLANET.length)];
-      else if(type>0.55) glyph=ZODIAC[Math.floor(Math.random()*ZODIAC.length)];
-      else if(type>0.38) glyph=SPARKS[Math.floor(Math.random()*SPARKS.length)];
-      trail.push({
-        x:mx+(Math.random()-.5)*14,
-        y:my+(Math.random()-.5)*14,
-        vx:(Math.random()-.5)*1.1,
-        vy:-(Math.random()*1.4+.4),
-        life:1,
-        decay:.02+Math.random()*.028,
-        kind: type<.55?0:1,
-        size:Math.random()*2.8+.6,
-        glyph,
-        rot:(Math.random()-.5)*.1,
-        fontSize:7+Math.random()*7
-      });
-    }
+    mx=e.clientX;my=e.clientY;const n=Math.floor(Math.random()*3)+1;
+    for(let i=0;i<n;i++){const type=Math.random();let glyph=null;if(type>0.75)glyph=PLANET[Math.floor(Math.random()*PLANET.length)];else if(type>0.55)glyph=ZODIAC[Math.floor(Math.random()*ZODIAC.length)];else if(type>0.38)glyph=SPARKS[Math.floor(Math.random()*SPARKS.length)];trail.push({x:mx+(Math.random()-.5)*14,y:my+(Math.random()-.5)*14,vx:(Math.random()-.5)*1.1,vy:-(Math.random()*1.4+.4),life:1,decay:.02+Math.random()*.028,kind:type<.55?0:1,size:Math.random()*2.8+.6,glyph,rot:(Math.random()-.5)*.1,fontSize:7+Math.random()*7});}
   });
-
-  // Hover elements
-  const hovEls='a,button,.svc-c,.tc,.stat,.ps,.moon-strip span,.nav-book';
-  document.querySelectorAll(hovEls).forEach(el=>{
+  document.querySelectorAll('a,button,.sub-card,.tc,.stat,.ps,.moon-strip span,.nav-book').forEach(el=>{
     el.addEventListener('mouseenter',()=>{sun.classList.add('hov');trailEl.classList.add('hov');trailEl.textContent='☾';});
     el.addEventListener('mouseleave',()=>{sun.classList.remove('hov');trailEl.classList.remove('hov');trailEl.textContent='☽';});
   });
-
   function loop(){
-    // Sun — snaps to cursor
-    sun.style.left=mx+'px';sun.style.top=my+'px';
-    // Trail — lags softly
-    lx+=(mx-lx)*.08;ly+=(my-ly)*.08;
-    trailEl.style.left=lx+'px';trailEl.style.top=ly+'px';
-
+    sun.style.left=mx+'px';sun.style.top=my+'px';lx+=(mx-lx)*.08;ly+=(my-ly)*.08;trailEl.style.left=lx+'px';trailEl.style.top=ly+'px';
     ctx.clearRect(0,0,W,H);
-
     for(let i=trail.length-1;i>=0;i--){
-      const p=trail[i];
-      p.x+=p.vx;p.y+=p.vy;p.vy*=.97;p.vx*=.98;
-      p.life-=p.decay;
-      if(p.life<=0){trail.splice(i,1);continue;}
-
-      if(p.glyph){
-        ctx.save();
-        ctx.globalAlpha=p.life*.6;
-        const isZodiac=ZODIAC.includes(p.glyph);
-        const isPlanet=PLANET.includes(p.glyph);
-        if(isPlanet){
-          ctx.fillStyle=`rgba(167,139,250,${p.life*.85})`;
-          ctx.font=`${p.fontSize+3}px serif`;
-        } else if(isZodiac){
-          ctx.fillStyle=`rgba(240,200,106,${p.life*.8})`;
-          ctx.font=`${p.fontSize+2}px serif`;
-        } else {
-          ctx.fillStyle=p.kind===0?`rgba(240,200,106,${p.life*.8})`:`rgba(167,139,250,${p.life*.8})`;
-          ctx.font=`${p.fontSize}px serif`;
-        }
-        ctx.translate(p.x,p.y);
-        ctx.rotate(p.rot*(trail.length-i));
-        ctx.fillText(p.glyph,0,0);
-        ctx.restore();
-      } else {
-        // Radial gradient spark
-        const col=p.kind===0?[240,200,106]:[167,139,250];
-        const gr=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.size*2.8);
-        gr.addColorStop(0,`rgba(${col[0]},${col[1]},${col[2]},${p.life*.9})`);
-        gr.addColorStop(1,`rgba(${col[0]},${col[1]},${col[2]},0)`);
-        ctx.fillStyle=gr;
-        ctx.beginPath();ctx.arc(p.x,p.y,p.size*2.8,0,Math.PI*2);ctx.fill();
-        if(p.kind===0&&p.size>1.5){
-          ctx.globalAlpha=p.life*.3;
-          ctx.strokeStyle=`rgba(240,200,106,${p.life})`;
-          ctx.lineWidth=.5;
-          const fl=p.size*4;
-          ctx.beginPath();ctx.moveTo(p.x-fl,p.y);ctx.lineTo(p.x+fl,p.y);ctx.stroke();
-          ctx.beginPath();ctx.moveTo(p.x,p.y-fl);ctx.lineTo(p.x,p.y+fl);ctx.stroke();
-        }
-      }
+      const p=trail[i];p.x+=p.vx;p.y+=p.vy;p.vy*=.97;p.vx*=.98;p.life-=p.decay;if(p.life<=0){trail.splice(i,1);continue;}
+      if(p.glyph){ctx.save();ctx.globalAlpha=p.life*.6;const isZodiac=ZODIAC.includes(p.glyph),isPlanet=PLANET.includes(p.glyph);if(isPlanet){ctx.fillStyle=`rgba(167,139,250,${p.life*.85})`;ctx.font=`${p.fontSize+3}px serif`;}else if(isZodiac){ctx.fillStyle=`rgba(240,200,106,${p.life*.8})`;ctx.font=`${p.fontSize+2}px serif`;}else{ctx.fillStyle=p.kind===0?`rgba(240,200,106,${p.life*.8})`:`rgba(167,139,250,${p.life*.8})`;ctx.font=`${p.fontSize}px serif`;}ctx.translate(p.x,p.y);ctx.rotate(p.rot*(trail.length-i));ctx.fillText(p.glyph,0,0);ctx.restore();}
+      else{const col=p.kind===0?[240,200,106]:[167,139,250];const gr=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.size*2.8);gr.addColorStop(0,`rgba(${col[0]},${col[1]},${col[2]},${p.life*.9})`);gr.addColorStop(1,`rgba(${col[0]},${col[1]},${col[2]},0)`);ctx.fillStyle=gr;ctx.beginPath();ctx.arc(p.x,p.y,p.size*2.8,0,Math.PI*2);ctx.fill();}
       ctx.globalAlpha=1;
-    }
-    requestAnimationFrame(loop);
-  }
-  loop();
+    }requestAnimationFrame(loop);
+  }loop();
 })();
 
-/* ══ SERVICE CARD MAGNETIC GLOW ══ */
-document.querySelectorAll('.svc-c').forEach(c=>{
-  c.addEventListener('mousemove',e=>{
-    const r=c.getBoundingClientRect();
-    c.style.setProperty('--mx',(e.clientX-r.left)+'px');
-    c.style.setProperty('--my',(e.clientY-r.top)+'px');
-  });
-});
-
-/* ══ MARQUEE ══ */
+/* MARQUEE */
 (()=>{
-  const items=['Vedic Astrology','Tarot Reading','Reiki Healing','Guided Meditation','Life Coaching','Law of Attraction','Chakra Balancing','Sacred Learning','Manifestation','Journey Towards Light'];
+  const items=['Vedic Astrology','Tarot Reading','Reiki Healing','Guided Meditation','Law of Attraction','Chakra Balancing','Tarot Certification','Enlightened Happiness','Meditation Training','Journey Towards Light'];
   const t=document.getElementById('mqT');
-  [...items,...items,...items,...items].forEach(txt=>{
-    const d=document.createElement('div');d.className='mq-item';
-    d.innerHTML=`${txt}<span class="mq-sun">☀</span>`;
-    t.appendChild(d);
-  });
+  [...items,...items,...items,...items].forEach(txt=>{const d=document.createElement('div');d.className='mq-item';d.innerHTML=`${txt}<span class="mq-sun">☀</span>`;t.appendChild(d);});
 })();
 
-/* ══ NAV SCROLL ══ */
+/* NAV SCROLL */
 const nav=document.getElementById('mainNav');
 window.addEventListener('scroll',()=>nav.classList.toggle('solid',scrollY>55),{passive:true});
 
-/* ══ SCROLL REVEAL ══ */
-const ro=new IntersectionObserver(es=>{
-  es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vi');});
-},{threshold:.08,rootMargin:'0px 0px -30px 0px'});
+/* SCROLL REVEAL */
+const ro=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vi');});},{threshold:.08,rootMargin:'0px 0px -30px 0px'});
 document.querySelectorAll('.rev,.sl,.sh').forEach(el=>ro.observe(el));
 
-/* ══ MOON STRIP HOVER ══ */
+/* MOON HOVER */
 document.querySelectorAll('.moon-strip span').forEach(s=>{
-  s.addEventListener('mouseenter',()=>{
-    s.style.cssText='transform:scale(1.5) translateY(-6px);transition:all .3s;filter:drop-shadow(0 0 18px rgba(240,200,106,1));';
-  });
+  s.addEventListener('mouseenter',()=>{s.style.cssText='transform:scale(1.5) translateY(-6px);transition:all .3s;filter:drop-shadow(0 0 18px rgba(240,200,106,1));';});
   s.addEventListener('mouseleave',()=>{s.style.cssText='';});
 });
 
-/* ══ STAT COUNT-UP ══ */
+/* STAT COUNT-UP */
 const co=new IntersectionObserver(es=>{
-  es.forEach(e=>{
-    if(!e.isIntersecting)return;
-    const el=e.target;
-    const raw=el.textContent.replace(/[^\d]/g,'');
-    if(!raw||isNaN(+raw))return;
-    const tgt=+raw;const suf=el.textContent.replace(raw,'');
-    let cur=0;
-    const iv=setInterval(()=>{
-      cur=Math.min(cur+tgt/55,tgt);
-      el.textContent=Math.floor(cur)+suf;
-      if(cur>=tgt)clearInterval(iv);
-    },1600/55);
-    co.unobserve(el);
-  });
+  es.forEach(e=>{if(!e.isIntersecting)return;const el=e.target;const raw=el.textContent.replace(/[^\d]/g,'');if(!raw||isNaN(+raw))return;const tgt=+raw,suf=el.textContent.replace(raw,'');let cur=0;const iv=setInterval(()=>{cur=Math.min(cur+tgt/55,tgt);el.textContent=Math.floor(cur)+suf;if(cur>=tgt)clearInterval(iv);},1600/55);co.unobserve(el);});
 },{threshold:.9});
 document.querySelectorAll('.stat-n').forEach(el=>co.observe(el));
+
+/* SUB-CARD MOUSE GLOW */
+document.querySelectorAll('.sub-card').forEach(c=>{
+  c.addEventListener('mousemove',e=>{const r=c.getBoundingClientRect();c.style.setProperty('--mx',(e.clientX-r.left)+'px');c.style.setProperty('--my',(e.clientY-r.top)+'px');});
+});
 </script>
 </body>
 </html>
