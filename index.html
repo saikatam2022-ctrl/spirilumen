@@ -463,11 +463,6 @@ nav.solid{
              inset 0 1px 0 rgba(196,181,253,.05);
   transition:transform .4s cubic-bezier(.25,.46,.45,.94),
              box-shadow .4s,border-color .4s;
-  background-image: url('bg_2.png'); /* change per card */
-  background-size: cover;
-  background-position: center;
-  background-blend-mode: multiply;
-  background-color: rgba(10, 8, 25, 0.4);
 }
 .svc-c:hover{
   transform:translateY(-7px);
@@ -590,23 +585,35 @@ nav.solid{
 .tst-hdr{text-align:center;margin-bottom:52px;}
 .tst-g{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
 .tc{
-  background:linear-gradient(160deg, var(--card) 0%, #221d45 100%);border:1px solid var(--line);
-  padding:46px 34px;position:relative;overflow:hidden;
-  transition:all .5s cubic-bezier(.25,.46,.45,.94);
+  background:linear-gradient(148deg,rgba(22,17,52,.92) 0%,rgba(14,11,35,.95) 100%);
+  border:1px solid rgba(139,92,246,.14);
+  border-radius:22px;
+  padding:44px 34px 38px;
+  position:relative;overflow:hidden;cursor:none;
+  backdrop-filter:blur(14px);
+  box-shadow:0 2px 28px rgba(0,0,0,.3),inset 0 1px 0 rgba(196,181,253,.05);
+  transition:transform .4s cubic-bezier(.25,.46,.45,.94),box-shadow .4s,border-color .4s;
 }
 .tc::before{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse at 50% -10%,rgba(91,33,182,.09),transparent 60%);
-  opacity:0;transition:opacity .5s;
+  content:'';position:absolute;
+  width:260px;height:260px;border-radius:50%;
+  background:radial-gradient(circle,rgba(91,33,182,.12),transparent 68%);
+  top:var(--tc-my,-70px);left:var(--tc-mx,-70px);
+  transform:translate(-50%,-50%);
+  opacity:.7;transition:opacity .4s;pointer-events:none;z-index:0;
 }
 .tc::after{
-  content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
-  background:linear-gradient(to right,transparent,var(--p2),var(--gold),transparent);
-  transform:scaleX(0);transition:transform .6s;
+  content:'';position:absolute;top:0;left:12%;right:12%;height:1px;
+  border-radius:1px;
+  background:linear-gradient(to right,transparent,rgba(196,181,253,.45),rgba(226,185,90,.35),rgba(196,181,253,.45),transparent);
+  opacity:0;transform:scaleX(0);transform-origin:center;
+  transition:transform .55s cubic-bezier(.25,.46,.45,.94),opacity .4s;
+  z-index:0;
 }
-.tc:hover{transform:translateY(-7px);border-color:rgba(124,58,237,.32);box-shadow:0 20px 60px rgba(91,33,182,.18);}
+.tc > *{position:relative;z-index:2;}
+.tc:hover{transform:translateY(-7px);border-color:rgba(139,92,246,.3);box-shadow:0 18px 52px rgba(0,0,0,.38),0 0 28px rgba(91,33,182,.08),inset 0 1px 0 rgba(196,181,253,.08);}
 .tc:hover::before{opacity:1;}
-.tc:hover::after{transform:scaleX(1);}
+.tc:hover::after{opacity:1;transform:scaleX(1);}
 .tc-stars{display:flex;gap:4px;margin-bottom:18px;}
 .tc-stars span{
   color:var(--gold);font-size:12px;
@@ -1131,9 +1138,8 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
   <div class="hero-content">
     <h1 class="hero-h" style="margin-top:0;">Where Ancient Stars<br>Illuminate Your Sacred Path</h1>
     <p class="hero-sub">Vedic astrology, sacred healing arts, and transformative learning — the cosmos holds a language spoken uniquely for your soul.</p>
-    <div class="hero-btns">
+    <div class="hero-btns" style="justify-content:center;">
       <a href="#services" class="hbp"><span>Explore Sacred Arts</span></a>
-      <a href="#consult" class="hbs">Book a Session</a>
     </div>
     <div class="moon-strip">
       <span>🌑</span><span>🌒</span><span>🌕</span><span>🌘</span><span>🌑</span>
@@ -1279,7 +1285,7 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
         <a href="#consult" class="svc-lnk">Reveal Path →</a>
       </div>
     </div>
-    <!--<div class="svc-g2">
+    <div class="svc-g2">
       <div class="svc-c rev" id="sc4">
         <span class="svc-ic">◈</span>
         <span class="svc-nm">04 · Coaching</span>
@@ -1304,7 +1310,7 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
           <span class="svc-tag">Meditation Training</span>
           <span class="svc-tag">Group Cohorts</span>
         </div>
-        <a href="#consult" class="svc-lnk">Learn &amp; Awaken →</a>-->
+        <a href="#consult" class="svc-lnk">Learn &amp; Awaken →</a>
       </div>
     </div>
   </div>
@@ -1600,6 +1606,15 @@ document.querySelectorAll('.svc-c').forEach(c=>{
     const r=c.getBoundingClientRect();
     c.style.setProperty('--mx',(e.clientX-r.left)+'px');
     c.style.setProperty('--my',(e.clientY-r.top)+'px');
+  });
+});
+
+/* ══ TESTIMONIAL CARD MAGNETIC GLOW ══ */
+document.querySelectorAll('.tc').forEach(c=>{
+  c.addEventListener('mousemove',e=>{
+    const r=c.getBoundingClientRect();
+    c.style.setProperty('--tc-mx',(e.clientX-r.left)+'px');
+    c.style.setProperty('--tc-my',(e.clientY-r.top)+'px');
   });
 });
 
