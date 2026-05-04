@@ -1,6 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>
+document.querySelectorAll('.svc-c').forEach(card => {
+  card.addEventListener('click', function (e) {
+    // prevent double trigger if user clicks the actual link
+    if (e.target.tagName.toLowerCase() === 'a') return;
+
+    const link = this.getAttribute('data-link');
+    if (link) {
+      window.location.href = link;
+    }
+  });
+});
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Spirilumen — Journey Towards Light</title>
@@ -1255,7 +1268,7 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
       <h2 class="sh rev">Sacred Arts of <em>Spirilumen</em></h2>
     </div>
     <div class="svc-g">
-      <div class="svc-c rev" id="sc1">
+      <div class="svc-c rev" id="sc1" data-link="astrology.html">
         <span class="svc-ic">♄</span>
         <span class="svc-nm">01 · Astrology</span>
         <h3 class="svc-name">Astrology</h3>
