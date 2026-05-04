@@ -1,19 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script>
-document.querySelectorAll('.svc-c').forEach(card => {
-  card.addEventListener('click', function (e) {
-    // prevent double trigger if user clicks the actual link
-    if (e.target.tagName.toLowerCase() === 'a') return;
-
-    const link = this.getAttribute('data-link');
-    if (link) {
-      window.location.href = link;
-    }
-  });
-});
-</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Spirilumen — Journey Towards Light</title>
@@ -1683,6 +1670,19 @@ const co=new IntersectionObserver(es=>{
   });
 },{threshold:.9});
 document.querySelectorAll('.stat-n').forEach(el=>co.observe(el));
+</script>
+   <script>
+document.querySelectorAll('.svc-c').forEach(card => {
+  card.addEventListener('click', function (e) {
+    // prevent double trigger if user clicks the actual link
+    if (e.target.tagName.toLowerCase() === 'a') return;
+
+    const link = this.getAttribute('data-link');
+    if (link) {
+      window.location.href = link;
+    }
+  });
+});
 </script>
 </body>
 </html>
