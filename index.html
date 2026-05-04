@@ -41,10 +41,6 @@ body{
   cursor:none;
 }
 
-/* ══════════════════════════════════════
-   NEW CURSOR — Sun Ray Design
-   Replaces ball+ring with animated sun
-══════════════════════════════════════ */
 #cur-sun{
   position:fixed;z-index:99999;pointer-events:none;
   width:24px;height:24px;
@@ -66,7 +62,6 @@ body{
   to{transform:rotate(360deg);}
 }
 
-/* Astrology trail follower — replaces leaf */
 #cur-trail{
   position:fixed;z-index:99998;pointer-events:none;
   width:18px;height:18px;
@@ -82,13 +77,8 @@ body{
   filter:drop-shadow(0 0 10px rgba(167,139,250,.8));
 }
 
-/* Canvas for particle trail */
 #trailC{position:fixed;inset:0;z-index:99997;pointer-events:none;}
 
-/* ══════════════════════════════════════
-   HERO SPIRAL — INFINITE DRAW, CENTERED
-   JS positions & sizes from live hero rect
-══════════════════════════════════════ */
 #heroSpiralSvg{
   position:absolute;
   top:0; left:0;
@@ -104,7 +94,6 @@ body{
   stroke-linecap:round;
   stroke-linejoin:round;
   filter:url(#spGlow);
-  /* dasharray/offset set by JS after path generation */
 }
 #heroSpiralGlow{
   animation:spTermPulse 4s ease-in-out infinite;
@@ -114,8 +103,6 @@ body{
   to{   stroke-dashoffset:0; }
 }
 @keyframes spCycle{
-  /* After initial draw, animate dashoffset to simulate
-     infinite spiral being "consumed" inward continuously */
   0%{   stroke-dashoffset:0; }
   100%{ stroke-dashoffset:calc(var(--sp-len) * -1); }
 }
@@ -124,14 +111,8 @@ body{
   50%{     opacity:0.15; r:20; }
 }
 
-/* ══════════════════════════════════════
-   STAR + SPACE CANVAS
-══════════════════════════════════════ */
 #spaceC{position:fixed;inset:0;z-index:0;pointer-events:none;}
 
-/* ══════════════════════════════════════
-   NEBULA / ATMOSPHERE
-══════════════════════════════════════ */
 .nbl{position:fixed;border-radius:50%;pointer-events:none;z-index:1;mix-blend-mode:screen;}
 .n1{width:900px;height:900px;top:-260px;right:-220px;background:radial-gradient(circle,rgba(109,40,217,.10),rgba(139,92,246,.04) 50%,transparent 72%);filter:blur(80px);animation:nd 22s ease-in-out infinite;}
 .n2{width:700px;height:700px;bottom:-120px;left:-160px;background:radial-gradient(circle,rgba(139,92,246,.08),rgba(109,40,217,.03) 55%,transparent 72%);filter:blur(90px);animation:nd 16s ease-in-out infinite reverse;}
@@ -143,9 +124,6 @@ body{
 .grain{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.035;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");}
 
-/* ══════════════════════════════════════
-   NAV
-══════════════════════════════════════ */
 nav{
   position:fixed;top:0;left:0;right:0;z-index:300;
   padding:0 64px;height:80px;
@@ -160,7 +138,6 @@ nav.solid{
   box-shadow:0 2px 40px rgba(0,0,0,.35);
 }
 
-/* Logo group */
 .logo-group{display:flex;align-items:center;gap:14px;}
 .logo-sun-svg{
   width:34px;height:34px;flex-shrink:0;
@@ -212,9 +189,6 @@ nav.solid{
 .nav-book:hover::before{transform:translateX(0);}
 .nav-book:hover{box-shadow:0 0 28px rgba(212,168,67,.22);}
 
-/* ══════════════════════════════════════
-   HERO
-══════════════════════════════════════ */
 .hero{
   position:relative;z-index:10;
   min-height:100vh;
@@ -225,7 +199,6 @@ nav.solid{
   background:radial-gradient(ellipse 70% 55% at 50% -5%, rgba(139,92,246,.25) 0%, rgba(109,40,217,.08) 50%, transparent 75%);
 }
 
-/* Central rotating SVG wreath + sun */
 .hero-emblem{
   position:absolute;top:50%;left:50%;
   transform:translate(-50%,-50%);
@@ -256,7 +229,6 @@ nav.solid{
 }
 @keyframes ringRot{from{transform:translate(-50%,-50%) rotate(0deg);}to{transform:translate(-50%,-50%) rotate(360deg);}}
 
-/* Floating planetary symbols */
 .fp{
   position:absolute;font-family:'Cinzel',serif;
   pointer-events:none;z-index:1;
@@ -270,8 +242,6 @@ nav.solid{
 }
 
 .hero-content{position:relative;z-index:5;}
-
-/* hero-logo removed — logo lives only in nav */
 
 .hero-h{
   font-family:'EB Garamond',serif;
@@ -351,9 +321,6 @@ nav.solid{
 @keyframes pd{0%{transform:translateY(-100%);}100%{transform:translateY(200%);}}
 @keyframes riseUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
 
-/* ══════════════════════════════════════
-   MARQUEE STRIP
-══════════════════════════════════════ */
 .mq-wrap{
   position:relative;z-index:10;
   border-top:1px solid var(--line);border-bottom:1px solid var(--line);
@@ -369,9 +336,6 @@ nav.solid{
 }
 .mq-sun{font-size:13px;color:var(--gold);animation:sunRotate 6s linear infinite;}
 
-/* ══════════════════════════════════════
-   SACRED DIVIDER
-══════════════════════════════════════ */
 .s-div{
   position:relative;z-index:10;
   display:flex;align-items:center;gap:20px;
@@ -384,9 +348,6 @@ nav.solid{
 .s-div-c span:nth-child(2){animation-delay:.5s;}
 @keyframes tw{0%,100%{opacity:.3;transform:scale(.8);}50%{opacity:.8;transform:scale(1.1);}}
 
-/* ══════════════════════════════════════
-   SECTION UTILITY
-══════════════════════════════════════ */
 .sw{position:relative;z-index:10;}
 .sl{font-size:11px;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:14px;}
 .sh{
@@ -400,13 +361,9 @@ nav.solid{
 .rev.vi{opacity:1;transform:none;}
 .d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}.d4{transition-delay:.4s;}
 
-/* ══════════════════════════════════════
-   ABOUT
-══════════════════════════════════════ */
 .about-w{max-width:1240px;margin:0 auto;padding:90px 80px;}
 .about-g{display:grid;grid-template-columns:1fr 1.1fr;gap:72px;align-items:center;}
 
-/* Spirilumen-branded visual: wreath sphere */
 .brand-sphere{
   width:320px;height:320px;position:relative;margin:0 auto;
 }
@@ -438,7 +395,6 @@ nav.solid{
 }
 @keyframes wreathSpin{to{transform:rotate(360deg);}}
 
-/* orbit dots */
 .bs-orb{
   position:absolute;top:50%;left:50%;border-radius:50%;border:1px solid;
   transform:translate(-50%,-50%);
@@ -487,18 +443,15 @@ nav.solid{
   max-width:1240px;margin:0 auto;
 }
 .svc-hdr{text-align:center;margin-bottom:56px;}
-/* top row — 3 cards */
 .svc-g{
   display:grid;grid-template-columns:repeat(3,1fr);
   gap:18px;background:none;border:none;
 }
-/* bottom row — 2 wider cards */
 .svc-g2{
   display:grid;grid-template-columns:1fr 1fr;
   gap:18px;margin-top:18px;background:none;border:none;
 }
 
-/* ── individual card ── */
 .svc-c{
   background:linear-gradient(148deg,rgba(22,17,52,.92) 0%,rgba(14,11,35,.95) 100%);
   border:1px solid rgba(139,92,246,.14);
@@ -510,21 +463,6 @@ nav.solid{
              inset 0 1px 0 rgba(196,181,253,.05);
   transition:transform .4s cubic-bezier(.25,.46,.45,.94),
              box-shadow .4s,border-color .4s;
-  position: relative;
-  overflow: hidden;
-
-  background-image: url('bg_2.png'); /* change per card */
-  background-size: cover;
-  background-position: center;
-  background-blend-mode: multiply;
-  background-color: rgba(10, 8, 25, 0.4);
-   backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
-.svc-c > *{
-  position: relative;
-  z-index: 2;
 }
 .svc-c:hover{
   transform:translateY(-7px);
@@ -532,13 +470,8 @@ nav.solid{
   box-shadow:0 18px 52px rgba(0,0,0,.38),
              0 0 28px rgba(91,33,182,.08),
              inset 0 1px 0 rgba(196,181,253,.08);
-			 
-  
-			 
-		 
 }
 
-/* Radial mouse-follow glow */
 .svc-c::before{
   content:'';position:absolute;
   width:260px;height:260px;border-radius:50%;
@@ -546,31 +479,22 @@ nav.solid{
   top:var(--my,-70px);left:var(--mx,-70px);
   transform:translate(-50%,-50%);
   opacity:.7;transition:opacity .4s;pointer-events:none;
+  z-index:0;
 }
 .svc-c:hover::before{opacity:1;}
 
-/* Shimmer line across top edge on hover */
 .svc-c::after{
   content:'';position:absolute;top:0;left:12%;right:12%;height:1px;
   border-radius:1px;
   background:linear-gradient(to right,transparent,rgba(196,181,253,.45),rgba(226,185,90,.35),rgba(196,181,253,.45),transparent);
   opacity:0;transform:scaleX(0);transform-origin:center;
   transition:transform .55s cubic-bezier(.25,.46,.45,.94),opacity .4s;
-  content:'';
-  position:absolute;
-  inset:0;
-
-  background: linear-gradient(
-    180deg,
-    rgba(8,6,20,0.65),
-    rgba(5,4,15,0.88)
-  );
-
-  z-index:1;
+  z-index:0;
 }
 .svc-c:hover::after{opacity:1;transform:scaleX(1);}
 
-/* Icon */
+.svc-c > *{position:relative;z-index:2;}
+
 .svc-ic{
   font-size:34px;margin-bottom:20px;display:inline-block;line-height:1;
   transition:transform .5s cubic-bezier(.34,1.56,.64,1),filter .5s;
@@ -581,20 +505,16 @@ nav.solid{
   filter:drop-shadow(0 0 16px rgba(167,139,250,.7));
 }
 
-/* Category label */
 .svc-nm{
   font-size:10px;letter-spacing:.3em;text-transform:uppercase;
   color:var(--p3);margin-bottom:12px;display:block;opacity:.75;
 }
-/* Service title */
 .svc-name{
   font-family:'Cormorant Upright',serif;font-size:26px;font-weight:400;
   line-height:1.2;margin-bottom:12px;
 }
-/* Description */
 .svc-desc{font-size:14px;line-height:1.9;color:var(--muted);margin-bottom:20px;}
 
-/* Tags — pill shaped */
 .svc-tags{display:flex;flex-wrap:wrap;gap:7px;}
 .svc-tag{
   font-size:10px;letter-spacing:.06em;color:var(--p3);
@@ -610,7 +530,6 @@ nav.solid{
   color:var(--p4);
 }
 
-/* Explore link */
 .svc-lnk{
   display:inline-flex;align-items:center;gap:8px;margin-top:26px;
   font-family:'Cinzel',serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
@@ -619,9 +538,6 @@ nav.solid{
 }
 .svc-lnk:hover{gap:14px;opacity:1;text-shadow:0 0 12px rgba(212,168,67,.55);}
 
-/* ══════════════════════════════════════
-   PROCESS
-══════════════════════════════════════ */
 .proc-w{max-width:1200px;margin:0 auto;padding:80px 80px;}
 .proc-steps{
   display:grid;grid-template-columns:repeat(4,1fr);
@@ -659,9 +575,6 @@ nav.solid{
 .ps-t{font-family:'Cormorant Upright',serif;font-size:22px;font-weight:400;margin-bottom:12px;}
 .ps-d{font-size:14px;line-height:1.85;color:var(--muted);}
 
-/* ══════════════════════════════════════
-   TESTIMONIALS
-══════════════════════════════════════ */
 .tst-w{padding:80px 80px;position:relative;overflow:hidden;}
 .tst-w::before{
   content:'';position:absolute;inset:0;z-index:0;
@@ -717,7 +630,6 @@ nav.solid{
 .ta-n{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.07em;}
 .ta-r{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:3px;}
 
-/* Divine light shaft — hero illumination */
 .hero::before{
   content:'';
   position:absolute;top:-100px;left:50%;transform:translateX(-50%);
@@ -736,9 +648,6 @@ nav.solid{
 }
 @keyframes lightShaft{0%,100%{opacity:.65;}50%{opacity:1;}}
 
-/* ══════════════════════════════════════
-   CTA
-══════════════════════════════════════ */
 .cta-w{
   padding:100px 80px;text-align:center;
   position:relative;overflow:hidden;z-index:10;
@@ -760,7 +669,6 @@ nav.solid{
 }
 .cta-in{position:relative;z-index:1;max-width:720px;margin:0 auto;}
 
-/* CTA brand lockup */
 .cta-brand-lock{
   display:flex;flex-direction:column;align-items:center;gap:4px;margin-bottom:36px;
 }
@@ -808,9 +716,6 @@ nav.solid{
 .cta-note a{color:var(--gold);text-decoration:none;transition:color .3s;}
 .cta-note a:hover{color:var(--gold2);}
 
-/* ══════════════════════════════════════
-   FOOTER
-══════════════════════════════════════ */
 footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--deep) 0%, #0e0b1f 100%);border-top:1px solid var(--line);}
 .ft-gbar{height:1px;background:linear-gradient(to right,transparent,var(--p2),var(--gold),var(--p2),transparent);opacity:.4;}
 .ft-g{
@@ -855,9 +760,6 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
 .ft-btm p{font-size:12px;letter-spacing:.1em;color:var(--muted);}
 .ft-btm .fts{color:var(--gold);opacity:.6;}
 
-/* ══════════════════════════════════════
-   RESPONSIVE
-══════════════════════════════════════ */
 @media(max-width:1024px){
   nav{padding:0 28px;}
   .nav-links{display:none;}
@@ -892,9 +794,7 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
 
 <!-- Cursor -->
 <div id="cur-sun">
-  <!-- Sun ray SVG cursor -->
   <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <!-- Rays -->
     <line x1="24" y1="2" x2="24" y2="10" stroke="#f0c86a" stroke-width="2.2" stroke-linecap="round"/>
     <line x1="24" y1="38" x2="24" y2="46" stroke="#f0c86a" stroke-width="2.2" stroke-linecap="round"/>
     <line x1="2" y1="24" x2="10" y2="24" stroke="#f0c86a" stroke-width="2.2" stroke-linecap="round"/>
@@ -903,9 +803,7 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
     <line x1="34.8" y1="34.8" x2="40.5" y2="40.5" stroke="#f0c86a" stroke-width="2" stroke-linecap="round"/>
     <line x1="40.5" y1="7.5" x2="34.8" y2="13.2" stroke="#f0c86a" stroke-width="2" stroke-linecap="round"/>
     <line x1="13.2" y1="34.8" x2="7.5" y2="40.5" stroke="#f0c86a" stroke-width="2" stroke-linecap="round"/>
-    <!-- Inner ring -->
     <circle cx="24" cy="24" r="7" stroke="#f0c86a" stroke-width="1.5" fill="rgba(240,200,106,0.12)"/>
-    <!-- Core dot -->
     <circle cx="24" cy="24" r="3.5" fill="#f0c86a"/>
   </svg>
 </div>
@@ -926,7 +824,6 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
 <!-- NAV -->
 <nav id="mainNav">
   <div class="logo-group">
-    <!-- Nav sun SVG -->
     <svg class="logo-sun-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
       <line x1="24" y1="2" x2="24" y2="9" stroke="#d4a843" stroke-width="2" stroke-linecap="round"/>
       <line x1="24" y1="39" x2="24" y2="46" stroke="#d4a843" stroke-width="2" stroke-linecap="round"/>
@@ -956,11 +853,9 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
 <!-- HERO -->
 <section class="hero" id="home">
 
-  <!-- ═══ HERO SPIRAL — CLOCKWISE INFINITE ILLUSION ═══ -->
   <svg id="heroSpiralSvg" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
        style="position:absolute;top:0;left:0;pointer-events:none;z-index:1;overflow:visible;">
     <defs>
-      <!-- Soft glow: blur layered under source keeps stroke luminous but crisp -->
       <filter id="spGlow" x="-40%" y="-40%" width="180%" height="180%" color-interpolation-filters="sRGB">
         <feGaussianBlur in="SourceGraphic" stdDeviation="2.8" result="blur"/>
         <feMerge>
@@ -968,13 +863,11 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
           <feMergeNode in="SourceGraphic"/>
         </feMerge>
       </filter>
-      <!-- Center focal glow gradient -->
       <radialGradient id="spFocalGrad" cx="50%" cy="50%" r="50%">
         <stop offset="0%"   stop-color="rgba(216,180,254,0.9)"/>
         <stop offset="40%"  stop-color="rgba(167,139,250,0.35)"/>
         <stop offset="100%" stop-color="rgba(109,40,217,0)"/>
       </radialGradient>
-      <!-- Outer-edge radial fade mask so spiral fades at viewport edges -->
       <radialGradient id="spMaskGrad" cx="50%" cy="50%" r="50%">
         <stop offset="50%" stop-color="white" stop-opacity="1"/>
         <stop offset="100%" stop-color="white" stop-opacity="0"/>
@@ -983,84 +876,45 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
         <rect id="spMaskRect" fill="url(#spMaskGrad)"/>
       </mask>
     </defs>
-
-    <!-- 
-      ROTATION GROUP — the entire spiral rotates clockwise around cx,cy.
-      transform-origin is set inline via JS to the exact spiral center.
-      rotate(360deg) in SVG coordinate space (Y-down) = clockwise visually.
-    -->
     <g id="heroSpiralRotGroup" mask="url(#spFadeMask)">
       <path id="heroSpiralPath"/>
     </g>
-
-    <!-- Focal center elements — fixed, not rotated -->
     <circle id="heroSpiralGlow" r="22" fill="url(#spFocalGrad)" filter="url(#spGlow)" opacity="0"/>
     <circle id="heroSpiralCore" r="3"  fill="rgba(230,210,255,0.95)" filter="url(#spGlow)" opacity="0"/>
   </svg>
 
   <script>
   (function(){
-    /*
-    ╔══════════════════════════════════════════════════════════╗
-    ║  INFINITE CLOCKWISE SPIRAL — DESIGN LOGIC               ║
-    ║                                                         ║
-    ║  KEY INSIGHT: The spiral is ALWAYS FULLY DRAWN.         ║
-    ║  No dashoffset animation after the initial reveal.      ║
-    ║  "Infinite" illusion = full spiral rotates CW slowly.   ║
-    ║                                                         ║
-    ║  As it rotates, the outer arm continuously sweeps in    ║
-    ║  from the left, the inner loops tighten toward center,  ║
-    ║  and the eye reads this as endless inward flow.         ║
-    ║                                                         ║
-    ║  Center focal glow pulses — creates the illusion that   ║
-    ║  the spiral is feeding into an infinite singularity.    ║
-    ╚══════════════════════════════════════════════════════════╝
-    */
-
     var CFG = {
-      turns:      9,      // spiral loop count — 6 gives rich density
-      steps:      900,    // path point count — higher = silkier bezier
-      rFraction:  0.50,   // outer radius as % of hero width (60% → left arm off-screen)
-      rInner:     3,      // px: inner radius (tiny curl at center)
-      drawDur:    5.5,    // s: initial draw-in duration
-      rotDur:     35,     // s: one full CW rotation — slow = hypnotic
-      strokeW:    1.6,    // px: stroke width
-      strokeCol:  'rgba(196,181,253,0.62)',  // lavender, visible but not harsh
+      turns:      9,
+      steps:      900,
+      rFraction:  0.50,
+      rInner:     3,
+      drawDur:    5.5,
+      rotDur:     35,
+      strokeW:    1.6,
+      strokeCol:  'rgba(196,181,253,0.62)',
     };
 
-    /*
-      CLOCKWISE SPIRAL GEOMETRY
-      ─────────────────────────
-      SVG Y-axis points DOWN (opposite to math convention).
-      Standard parametric: x = r·cos(θ), y = r·sin(θ) → CCW in SVG.
-
-      To get CLOCKWISE in SVG:  y = -r·sin(θ)  (flip Y component).
-
-      We iterate θ from thetaMax→0 (outer arm first, spirals inward).
-      angleOffset = Math.PI positions the outer arm pointing LEFT.
-      With CW geometry + PI offset → outer arm exits left, 
-      rotates clockwise as θ decreases inward.
-    */
     function buildSpiral(cx, cy, rOuter, rInner) {
       var total = CFG.turns * 2 * Math.PI;
       var pts   = [];
       for (var i = 0; i <= CFG.steps; i++) {
         var t     = i / CFG.steps;
-        var theta = total * (1 - t);               // thetaMax → 0
-        var r     = rOuter + (rInner - rOuter) * t; // rOuter → rInner
-        var angle = theta + Math.PI;               // PI offset → left entry
+        var theta = total * (1 - t);
+        var r     = rOuter + (rInner - rOuter) * t;
+        var angle = theta + Math.PI;
         pts.push([
           cx + r * Math.cos(angle),
-          cy - r * Math.sin(angle)                 // negative sin → CW
+          cy - r * Math.sin(angle)
         ]);
       }
       return pts;
     }
 
-    /* Catmull-Rom → cubic bezier for organic smooth curves */
     function toPath(pts) {
       var d = 'M ' + pts[0][0].toFixed(2) + ',' + pts[0][1].toFixed(2);
-      var k = 0.36; // tension
+      var k = 0.36;
       for (var i = 0; i < pts.length - 1; i++) {
         var p0 = pts[Math.max(i-1, 0)];
         var p1 = pts[i];
@@ -1095,30 +949,24 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
       var maskRect = document.getElementById('spMaskRect');
       if (!hero || !svg || !path) return;
 
-      /* ① Measure hero live dimensions */
       var rect = hero.getBoundingClientRect();
       var W = rect.width;
       var H = rect.height;
 
-      /* ② Size SVG to exactly cover hero */
       svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
       svg.style.width  = W + 'px';
       svg.style.height = H + 'px';
 
-      /* ③ Spiral center = exact pixel center of hero */
       var cx = W * 0.50;
       var cy = H * 0.50;
 
-      /* ④ Radii — outer arm bleeds off left edge */
       var rOuter = W * CFG.rFraction;
       var rInner = CFG.rInner;
 
-      /* ⑤ Build path */
       var pts = buildSpiral(cx, cy, rOuter, rInner);
       var d   = toPath(pts);
       path.setAttribute('d', d);
 
-      /* ⑥ Style path */
       path.style.fill           = 'none';
       path.style.stroke         = CFG.strokeCol;
       path.style.strokeWidth    = CFG.strokeW + 'px';
@@ -1126,63 +974,30 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
       path.style.strokeLinejoin = 'round';
       path.style.filter         = 'url(#spGlow)';
 
-      /* ⑦ Size fade mask */
       maskRect.setAttribute('x',      0);
       maskRect.setAttribute('y',      0);
       maskRect.setAttribute('width',  W);
       maskRect.setAttribute('height', H);
 
-      /* ⑧ Position focal elements at center */
       glow.setAttribute('cx', cx.toFixed(2));
       glow.setAttribute('cy', cy.toFixed(2));
       core.setAttribute('cx', cx.toFixed(2));
       core.setAttribute('cy', cy.toFixed(2));
 
-      /* ⑨ Measure true path length */
       var pathLen = Math.round(path.getTotalLength());
 
-      /* ══════════════════════════════════════════════════
-         ANIMATION STRATEGY
-
-         Phase 1 — DRAW IN (one-shot, 5.5s):
-           dasharray = pathLen, dashoffset animates pathLen→0
-           The spiral strokes itself on from outer to inner.
-
-         Phase 2 — INFINITE ROTATION (forever):
-           Remove all dashoffset animation. Reset dashoffset=0.
-           The spiral is NOW ALWAYS FULLY VISIBLE.
-           Only the rotation group spins CW continuously.
-           
-           This is the key fix: NO dashoffset marching after
-           draw-in. That was causing the "vanishing" — the 
-           stroke was being consumed by the offset animation.
-           
-           Pure rotation = the whole spiral turns. The outer
-           arm continuously sweeps from left → the brain reads
-           this as an endless inward flow. True infinite illusion.
-
-         CLOCKWISE confirmation:
-           - Geometry: y = cy - r*sin(angle) [CW in SVG Y-down]
-           - Rotation: rotate(0→360deg) on the group
-           In SVG, positive rotation = clockwise. ✓
-      ══════════════════════════════════════════════════*/
-
-      /* ── PHASE 1: Draw-in ── */
       path.style.animation   = 'none';
       path.style.transition  = 'none';
       rotGroup.style.animation = 'none';
       rotGroup.style.transformOrigin = cx + 'px ' + cy + 'px';
 
-      // Hide spiral initially
       path.style.strokeDasharray  = pathLen;
       path.style.strokeDashoffset = pathLen;
-      path.getBoundingClientRect(); // force reflow
+      path.getBoundingClientRect();
 
-      // Begin draw-in transition
       path.style.transition = 'stroke-dashoffset ' + CFG.drawDur + 's cubic-bezier(0.22,1,0.36,1)';
       path.style.strokeDashoffset = 0;
 
-      // Fade in focal glow partway through draw
       setTimeout(function(){
         glow.style.transition = 'opacity 2.5s ease';
         core.style.transition = 'opacity 1.8s ease';
@@ -1190,25 +1005,21 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
         core.style.opacity = '1';
       }, CFG.drawDur * 600);
 
-      /* ── PHASE 2: Switch to infinite CW rotation ── */
       setTimeout(function(){
-        // Kill dashoffset animation — spiral stays fully drawn
         path.style.transition  = 'none';
         path.style.animation   = 'none';
-        path.style.strokeDasharray  = 'none'; // fully visible, no dash
+        path.style.strokeDasharray  = 'none';
         path.style.strokeDashoffset = '0';
         path.getBoundingClientRect();
 
-        // Inject CW rotation keyframes (unique per init call)
         var uid = 'spCW_' + Math.floor(cx) + '_' + Date.now();
         injectStyle(uid,
           '@keyframes ' + uid + '{' +
             'from{transform:rotate(0deg);}' +
-            'to{transform:rotate(360deg);}' +   // positive = CW in SVG
+            'to{transform:rotate(360deg);}' +
           '}'
         );
 
-        // Pulse the focal glow to sell the "singularity" illusion
         injectStyle('spFocalPulse',
           '@keyframes spFocalPulse{' +
             '0%,100%{r:22;opacity:0.85;}' +
@@ -1223,15 +1034,12 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
           '}'
         );
 
-        // Apply rotation to the group — pivot = spiral center
         rotGroup.style.transformOrigin = cx + 'px ' + cy + 'px';
         rotGroup.style.animation = uid + ' ' + CFG.rotDur + 's linear infinite';
 
-        // Apply pulsing to focal elements
         glow.style.animation = 'spFocalPulse 6s ease-in-out infinite';
         core.style.animation = 'spCorePulse 4s ease-in-out infinite';
 
-        // Optional: very subtle stroke opacity breathe
         injectStyle('spBreathe',
           '@keyframes spBreathe{' +
             '0%,100%{stroke-opacity:0.62;}' +
@@ -1243,11 +1051,9 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
       }, (CFG.drawDur + 0.2) * 1000);
     }
 
-    /* Boot */
     if (document.readyState === 'complete') { init(); }
     else { window.addEventListener('load', init); }
 
-    /* Responsive: rebuild on resize */
     var resizeT;
     window.addEventListener('resize', function(){
       clearTimeout(resizeT);
@@ -1266,17 +1072,13 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
 
   })();
   </script>
-  <!-- ═══ END HERO SPIRAL ═══ -->
+
   <div class="hero-emblem">
-    <!-- Wreath SVG behind hero -->
     <svg class="emblem-wreath" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" style="width:min(580px,88vw);height:min(580px,88vw);">
       <g fill="none" stroke="rgba(212,168,67,1)" stroke-width="1.2">
-        <!-- Outer wreath circle suggestion -->
         <circle cx="250" cy="250" r="230" stroke-dasharray="6 12" opacity=".6"/>
         <circle cx="250" cy="250" r="200" stroke-dasharray="2 18" opacity=".35"/>
-        <!-- Inner sun ring -->
         <circle cx="250" cy="250" r="80" opacity=".4"/>
-        <!-- 12 zodiac tick marks -->
         <g opacity=".5">
           <line x1="250" y1="20" x2="250" y2="40"/>
           <line x1="250" y1="20" x2="250" y2="40" transform="rotate(30,250,250)"/>
@@ -1292,7 +1094,6 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
           <line x1="250" y1="20" x2="250" y2="40" transform="rotate(330,250,250)"/>
         </g>
       </g>
-      <!-- Zodiac symbols -->
       <g font-family="serif" font-size="16" fill="rgba(212,168,67,0.7)" text-anchor="middle" dominant-baseline="middle">
         <text transform="rotate(0,250,250) translate(250,45)">♈</text>
         <text transform="rotate(30,250,250) translate(250,45)">♉</text>
@@ -1325,12 +1126,10 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
   <div class="hero-content">
     <h1 class="hero-h" style="margin-top:0;">Where Ancient Stars<br>Illuminate Your Sacred Path</h1>
     <p class="hero-sub">Vedic astrology, sacred healing arts, and transformative learning — the cosmos holds a language spoken uniquely for your soul.</p>
-
     <div class="hero-btns">
       <a href="#services" class="hbp"><span>Explore Sacred Arts</span></a>
       <a href="#consult" class="hbs">Book a Session</a>
     </div>
-
     <div class="moon-strip">
       <span>🌑</span><span>🌒</span><span>🌕</span><span>🌘</span><span>🌑</span>
     </div>
@@ -1380,7 +1179,6 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
           <svg viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
             <circle cx="160" cy="160" r="145" stroke="rgba(212,168,67,0.55)" stroke-width="1" stroke-dasharray="5 10"/>
             <circle cx="160" cy="160" r="130" stroke="rgba(212,168,67,0.25)" stroke-width="0.7" stroke-dasharray="2 14"/>
-            <!-- Leaf cluster hints -->
             <g fill="rgba(212,168,67,0.4)" opacity=".7">
               <ellipse cx="160" cy="16" rx="4" ry="7" transform="rotate(0,160,160)"/>
               <ellipse cx="160" cy="16" rx="4" ry="7" transform="rotate(30,160,160)"/>
@@ -1441,13 +1239,68 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
       <h2 class="sh rev">Sacred Arts of <em>Spirilumen</em></h2>
     </div>
     <div class="svc-g">
-      <div class="svc-c rev" id="sc1"><span class="svc-ic">♄</span><span class="svc-nm">01 · Astrology</span><h3 class="svc-name">Vedic Astrology</h3><p class="svc-desc">The mother science of the Vedas — a precise celestial map of your soul's journey, karmic patterns, and life purpose encoded at your birth.</p><div class="svc-tags"><span class="svc-tag">Birth Chart</span><span class="svc-tag">Dasha Reading</span><span class="svc-tag">Compatibility</span><span class="svc-tag">Career Guidance</span></div><a href="#consult" class="svc-lnk">Begin Reading →</a></div>
-      <div class="svc-c rev d1" id="sc2"><span class="svc-ic">✧</span><span class="svc-nm">02 · Healing</span><h3 class="svc-name">Healing Arts</h3><p class="svc-desc">Ancient energy practices to restore harmony across body, mind, and spirit — Reiki and meditation that awaken your innate capacity to heal.</p><div class="svc-tags"><span class="svc-tag">Guided Meditation</span><span class="svc-tag">Reiki Healing</span><span class="svc-tag">Chakra Balancing</span><span class="svc-tag">Distance Healing</span></div><a href="#consult" class="svc-lnk">Explore Healing →</a></div>
-      <div class="svc-c rev d2" id="sc3"><span class="svc-ic">☽</span><span class="svc-nm">03 · Tarot</span><h3 class="svc-name">Tarot Reading</h3><p class="svc-desc">The cards mirror the soul's inner knowing. Each spread illuminates energies at play and the deeper wisdom your higher self already holds.</p><div class="svc-tags"><span class="svc-tag">Celtic Cross</span><span class="svc-tag">Monthly Guidance</span><span class="svc-tag">Relationship Spread</span><span class="svc-tag">Clarity Reading</span></div><a href="#consult" class="svc-lnk">Reveal Cards →</a></div>
+      <div class="svc-c rev" id="sc1">
+        <span class="svc-ic">♄</span>
+        <span class="svc-nm">01 · Astrology</span>
+        <h3 class="svc-name">Astrology</h3>
+        <p class="svc-desc">Ancient celestial wisdom that maps your soul's journey, karmic patterns, and life purpose through the sacred language of the stars.</p>
+        <div class="svc-tags">
+          <span class="svc-tag">Vedic Astrology</span>
+          <span class="svc-tag">Tarot Reading</span>
+        </div>
+        <a href="#consult" class="svc-lnk">Begin Reading →</a>
+      </div>
+      <div class="svc-c rev d1" id="sc2">
+        <span class="svc-ic">✧</span>
+        <span class="svc-nm">02 · Healing</span>
+        <h3 class="svc-name">Healing</h3>
+        <p class="svc-desc">Energy practices that restore harmony across body, mind, and spirit — awakening your innate capacity to heal and be whole.</p>
+        <div class="svc-tags">
+          <span class="svc-tag">Meditation</span>
+          <span class="svc-tag">Reiki</span>
+        </div>
+        <a href="#consult" class="svc-lnk">Explore Healing →</a>
+      </div>
+      <div class="svc-c rev d2" id="sc3">
+        <span class="svc-ic">☽</span>
+        <span class="svc-nm">03 · Learning</span>
+        <h3 class="svc-name">Learning</h3>
+        <p class="svc-desc">Immersive teachings in the sacred arts — from foundational wisdom to advanced practitioner mastery, guided by ancient lineage.</p>
+        <div class="svc-tags">
+          <span class="svc-tag">Law of Attraction</span>
+          <span class="svc-tag">Meditation</span>
+          <span class="svc-tag">+2 more</span>
+        </div>
+        <a href="#consult" class="svc-lnk">Reveal Path →</a>
+      </div>
     </div>
-    <div class="svc-g2">
-      <div class="svc-c rev" id="sc4"><span class="svc-ic">◈</span><span class="svc-nm">04 · Coaching</span><h3 class="svc-name">Life Coaching &amp; Law of Attraction</h3><p class="svc-desc">Consciousness-based coaching integrating Vedic principles with the universal laws of manifestation — helping you architect the life your soul is calling forward.</p><div class="svc-tags"><span class="svc-tag">1:1 Coaching</span><span class="svc-tag">Law of Attraction</span><span class="svc-tag">Manifestation Mapping</span><span class="svc-tag">Vision Clarity</span></div><a href="#consult" class="svc-lnk">Start Your Journey →</a></div>
-      <div class="svc-c rev d1" id="sc5"><span class="svc-ic">⟡</span><span class="svc-nm">05 · Learning</span><h3 class="svc-name">Sacred Learning</h3><p class="svc-desc">Immersive courses to awaken your intuitive gifts — from beginner foundations to advanced practitioner mastery in the ancient sacred arts.</p><div class="svc-tags"><span class="svc-tag">Tarot Certification</span><span class="svc-tag">Vedic Foundations</span><span class="svc-tag">Meditation Training</span><span class="svc-tag">Group Cohorts</span></div><a href="#consult" class="svc-lnk">Learn &amp; Awaken →</a></div>
+    <!--<div class="svc-g2">
+      <div class="svc-c rev" id="sc4">
+        <span class="svc-ic">◈</span>
+        <span class="svc-nm">04 · Coaching</span>
+        <h3 class="svc-name">Life Coaching &amp; Law of Attraction</h3>
+        <p class="svc-desc">Consciousness-based coaching integrating Vedic principles with the universal laws of manifestation — helping you architect the life your soul is calling forward.</p>
+        <div class="svc-tags">
+          <span class="svc-tag">1:1 Coaching</span>
+          <span class="svc-tag">Law of Attraction</span>
+          <span class="svc-tag">Manifestation Mapping</span>
+          <span class="svc-tag">Vision Clarity</span>
+        </div>
+        <a href="#consult" class="svc-lnk">Start Your Journey →</a>
+      </div>
+      <div class="svc-c rev d1" id="sc5">
+        <span class="svc-ic">⟡</span>
+        <span class="svc-nm">05 · Learning</span>
+        <h3 class="svc-name">Sacred Learning</h3>
+        <p class="svc-desc">Immersive courses to awaken your intuitive gifts — from beginner foundations to advanced practitioner mastery in the ancient sacred arts.</p>
+        <div class="svc-tags">
+          <span class="svc-tag">Tarot Certification</span>
+          <span class="svc-tag">Vedic Foundations</span>
+          <span class="svc-tag">Meditation Training</span>
+          <span class="svc-tag">Group Cohorts</span>
+        </div>-->
+        <a href="#consult" class="svc-lnk">Learn &amp; Awaken →</a>
+      </div>
     </div>
   </div>
 </div>
@@ -1646,7 +1499,6 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
 
   let mx=0,my=0,lx=0,ly=0;
   const trail=[];
-  // Astrology-relevant glyphs for particle trail
   const ZODIAC=['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];
   const PLANET=['☉','☽','☿','♀','♂','♃','♄'];
   const SPARKS=['✦','✧','⋆','·','★'];
@@ -1656,7 +1508,6 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
     const n=Math.floor(Math.random()*3)+1;
     for(let i=0;i<n;i++){
       const type=Math.random();
-      // 0-0.55: gold/purple sparks, 0.55-0.75: zodiac glyph, 0.75-1: planet glyph
       let glyph=null;
       if(type>0.75) glyph=PLANET[Math.floor(Math.random()*PLANET.length)];
       else if(type>0.55) glyph=ZODIAC[Math.floor(Math.random()*ZODIAC.length)];
@@ -1677,7 +1528,6 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
     }
   });
 
-  // Hover elements
   const hovEls='a,button,.svc-c,.tc,.stat,.ps,.moon-strip span,.nav-book';
   document.querySelectorAll(hovEls).forEach(el=>{
     el.addEventListener('mouseenter',()=>{sun.classList.add('hov');trailEl.classList.add('hov');trailEl.textContent='☾';});
@@ -1685,9 +1535,7 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
   });
 
   function loop(){
-    // Sun — snaps to cursor
     sun.style.left=mx+'px';sun.style.top=my+'px';
-    // Trail — lags softly
     lx+=(mx-lx)*.08;ly+=(my-ly)*.08;
     trailEl.style.left=lx+'px';trailEl.style.top=ly+'px';
 
@@ -1719,7 +1567,6 @@ footer{position:relative;z-index:10;background:linear-gradient(180deg, var(--dee
         ctx.fillText(p.glyph,0,0);
         ctx.restore();
       } else {
-        // Radial gradient spark
         const col=p.kind===0?[240,200,106]:[167,139,250];
         const gr=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.size*2.8);
         gr.addColorStop(0,`rgba(${col[0]},${col[1]},${col[2]},${p.life*.9})`);
